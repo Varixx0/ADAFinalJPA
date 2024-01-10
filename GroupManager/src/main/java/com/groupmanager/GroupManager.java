@@ -1,11 +1,14 @@
-/*
+package com.groupmanager;/*
  * Esta es la clase que contiene el main de la aplicacion. 
    Unicamente el punto de inicio, redirige a la clase controlador que se encarga del resto de cosas
  */
-package com.groupmanager;
 
-import Entity.Group;
-import Entity.Student;
+import controller.Inserts;
+import entity.Enrollment;
+import entity.Group;
+import entity.Project;
+import entity.Student;
+import entity.Module;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -18,20 +21,16 @@ import javax.persistence.Persistence;
 public class GroupManager {
 
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-
-        tx.begin();
+        Group groupTest = new Group(8, "Descripcion de prueba" , "DAM22");
+        Student studentTest = new Student("Eje20" , "Ejemplo" ,"Ejemplo", groupTest);
+        Project projectTest = new Project("Ej2", "Ejemplo", studentTest); 
+        Module moduleTest= new Module(422, "Ejemplo" , 2);
+        Enrollment enrollmentTest = new Enrollment(422, "Ejemplo", studentTest, moduleTest);
         
-       Group nuevoRegistro= new Group("Descripcion de prueba", "Clase de prueba");
-        
-        // Configura los atributos del nuevo registro
-        em.persist(nuevoRegistro);
-
-        tx.commit();
-
-        em.close();
-        emf.close();
+      Inserts.insertGroup(groupTest);
+      Inserts.insertStudent(studentTest);
+      Inserts.insertModule(moduleTest);
+      Inserts.insertProject(projectTest);
+      Inserts.insertEnrollment(enrollmentTest);
     }
 }

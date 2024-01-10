@@ -1,27 +1,25 @@
 /*
  * Clase Entity correspondiente a la tabla Matricula en la base de datos
  */
-package Entity;
+package entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.ForeignKey;
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "MATRICULA_VT04")
 public class Enrollment {
+    
     @Id
-    @Column(name = "NIA")
-    private String studentNIA;
-
-    @Id
-    @Column(name = "CODMODULO")
-    private int moduleId;
-
+    @Column(name = "IDMATRICULA")
+    private int idEnrollment;
     @Column(name = "DESCRIPCION")
     private String description;
 
@@ -37,21 +35,7 @@ public class Enrollment {
 
     // setters y getters
 
-    public String getStudentId() {
-        return studentNIA;
-    }
-
-    public void setStudentId(String studenNIA) {
-        this.studentNIA = studentNIA;
-    }
-
-    public int getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(int moduleId) {
-        this.moduleId = moduleId;
-    }
+  
 
     public String getDescription() {
         return description;
@@ -80,12 +64,11 @@ public class Enrollment {
     public Enrollment() {
     }
 
-    public Enrollment(String studentNIA, int moduleId, String description, Student student, Module module) {
-        this.studentNIA = studentNIA;
-        this.moduleId = moduleId;
+    public Enrollment(int id, String description, Student student, Module module) {
         this.description = description;
         this.student = student;
         this.module = module;
+        this.idEnrollment = id; 
     }
     
 

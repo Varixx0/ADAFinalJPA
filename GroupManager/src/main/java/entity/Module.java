@@ -1,7 +1,7 @@
 /*
  * * Clase Entity correspondiente a la tabla Modulo en la base de datos
  */
-package Entity;
+package entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

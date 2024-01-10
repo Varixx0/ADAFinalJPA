@@ -1,9 +1,10 @@
 /*
  * * Clase Entity correspondiente a la tabla Project en la base de datos
  */
-package Entity;
+package entity;
 
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -20,9 +21,6 @@ public class Project {
 
     @Column(name = "TITULO")
     private String title;
-
-    @Column(name = "NIA")
-    private String studentId;
 
     // Relacion con la tabla student
 
@@ -48,14 +46,7 @@ public class Project {
         this.title = title;
     }
 
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
-    }
-
+   
     public Student getStudent() {
         return student;
     }
@@ -67,12 +58,9 @@ public class Project {
     public Project() {
     }
 
-    public Project(String projectId, String title, String studentId, Student student) {
+    public Project(String projectId, String title, Student student) {
         this.projectId = projectId;
         this.title = title;
-        this.studentId = studentId;
         this.student = student;
     }
-
-    
 }

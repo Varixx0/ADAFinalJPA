@@ -1,8 +1,9 @@
 /*
  * * Clase Entity correspondiente a la tabla Alumno en la base de datos
  */
-package Entity;
+package entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -26,7 +27,7 @@ public class Student {
     private String lastName;
 
     @ManyToOne
-    @JoinColumn(name = "CODGRUPO", foreignKey = @ForeignKey(name = "FK_GROUP_STUDENT"))
+    @JoinColumn(name = "CODGRUPO")
     private Group group;
 
     //Setters y Getters
@@ -63,5 +64,15 @@ public class Student {
         this.group = group;
     }
 
+    public Student(String nia, String name, String lastName, Group group) {
+        this.nia = nia;
+        this.name = name;
+        this.lastName = lastName;
+        this.group = group;
+    }
 
+    public Student() {
+    }
+
+    
 }

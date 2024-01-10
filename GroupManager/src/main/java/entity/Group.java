@@ -1,7 +1,7 @@
     /*
      * Clase Entity correspondiente a la tabla GRUPO en la base de datos
      */
-    package Entity;
+    package entity;
 
     import javax.persistence.Entity;
     import javax.persistence.Id;
@@ -14,7 +14,6 @@
     @Table(name = "GRUPO_VT04")
     public class Group {
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "CODGRUPO")
         private int groupId;
 
@@ -55,7 +54,8 @@
         public Group() {
         }
 
-        public Group(String description, String classroom) {
+        public Group(int groupId, String description, String classroom) {
+        this.groupId=groupId;
         this.description = description;
         this.classroom = classroom;
     }
