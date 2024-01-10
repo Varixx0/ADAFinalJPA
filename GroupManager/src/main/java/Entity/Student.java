@@ -1,7 +1,7 @@
 /*
  * * Clase Entity correspondiente a la tabla Alumno en la base de datos
  */
-package data;
+package Entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,7 +29,7 @@ public class Student {
     @JoinColumn(name = "CODGRUPO", foreignKey = @ForeignKey(name = "FK_GROUP_STUDENT"))
     private Group group;
 
-   //Setters y Getters
+    //Setters y Getters
 
     public String getNia() {
         return nia;
@@ -62,6 +62,6 @@ public class Student {
     public void setGroup(Group group) {
         this.group = group;
     }
-    
-    
+
+
 }

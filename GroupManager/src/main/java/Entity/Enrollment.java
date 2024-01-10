@@ -1,7 +1,7 @@
 /*
  * Clase Entity correspondiente a la tabla Matricula en la base de datos
  */
-package data;
+package Entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -24,9 +24,9 @@ public class Enrollment {
 
     @Column(name = "DESCRIPCION")
     private String description;
-    
+
     //relaciones con las tablas Estudiante y Modulo
-    
+
     @ManyToOne
     @JoinColumn(name = "NIA")
     private Student student;
@@ -34,7 +34,7 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "CODMODULO")
     private Module module;
-    
+
     // setters y getters
 
     public String getStudentId() {
@@ -77,5 +77,16 @@ public class Enrollment {
         this.module = module;
     }
 
+    public Enrollment() {
+    }
+
+    public Enrollment(String studentNIA, int moduleId, String description, Student student, Module module) {
+        this.studentNIA = studentNIA;
+        this.moduleId = moduleId;
+        this.description = description;
+        this.student = student;
+        this.module = module;
+    }
     
+
 }

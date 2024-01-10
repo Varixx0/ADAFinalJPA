@@ -1,9 +1,21 @@
-<persistence-unit name="NombreUnidadPersistencia" transaction-type="RESOURCE_LOCAL">
-    <properties>
-        <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/SerpisFP"/>
-        <property name="javax.persistence.jdbc.user" value="root"/>
-        <property name="javax.persistence.jdbc.password" value="serpis"/>
-        <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-    </properties>
-</persistence-unit>
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+    http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd" version="2.2">
+
+    <persistence-unit name="JPAPersistence" transaction-type="RESOURCE_LOCAL">
+        <class>Entity.Student</class>
+        <class>Entity.Group</class>
+        <class>Entity.Module</class>
+        <class>Entity.Project</class>
+        <class>Entity.Enrollment</class>
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/serpisfp"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="serpis"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="eclipselink.ddl-generation" value="update"/>
+        </properties>
+    </persistence-unit>
+</persistence>

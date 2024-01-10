@@ -1,13 +1,12 @@
 /*
  * * Clase Entity correspondiente a la tabla Project en la base de datos
  */
-package data;
+package Entity;
 
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.ForeignKey;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
@@ -24,13 +23,13 @@ public class Project {
 
     @Column(name = "NIA")
     private String studentId;
-    
+
     // Relacion con la tabla student
-    
+
     @OneToOne
     @JoinColumn(name = "NIA")
     private Student student;
-    
+
     //Setters y Getters
 
     public String getProjectId() {
@@ -65,5 +64,15 @@ public class Project {
         this.student = student;
     }
 
-   
+    public Project() {
+    }
+
+    public Project(String projectId, String title, String studentId, Student student) {
+        this.projectId = projectId;
+        this.title = title;
+        this.studentId = studentId;
+        this.student = student;
+    }
+
+    
 }

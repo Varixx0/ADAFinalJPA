@@ -1,7 +1,8 @@
 /*
  * * Clase Entity correspondiente a la tabla Modulo en la base de datos
  */
-package data;
+package Entity;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -19,9 +20,9 @@ public class Module {
 
     @Column(name = "NUMHORAS")
     private int numHours;
-    
+
     //Setters y Getters
-    
+
     public int getModuleId() {
         return moduleId;
     }
@@ -46,6 +47,15 @@ public class Module {
         this.numHours = numHours;
     }
 
+    public Module() {
+    }
+
+    public Module(int moduleId, String description, int numHours) {
+        this.moduleId = moduleId;
+        this.description = description;
+        this.numHours = numHours;
+    }
     
+
 }
 

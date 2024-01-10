@@ -4,18 +4,17 @@
 package view;
 
 /**
- *
  * @author victermug
  */
 public class Menus {
     //mainMenu se encarga de imprimir por pantalla el menu principal. 
-    public static void mainMenu(){
-    //OPCIONES A IMPLEMENTAR
-     //Contadores de items
-     // Vaciar todas las tablas
-     //Añadir items
-     //Listado de elementos
-     //Borrar elementos
-     //Salir del programa
+    public static void mainMenu() {
+        //OPCIONES A IMPLEMENTAR
+        //Contadores de items
+        // Vaciar todas las tablas
+        //Añadir items
+        //Listado de elementos
+        //Borrar elementos
+        //Salir del programa
     }
 }
