@@ -19,7 +19,33 @@ public class Module {
 
     @Column(name = "NUMHORAS")
     private int numHours;
+    
+    //Setters y Getters
+    
+    public int getModuleId() {
+        return moduleId;
+    }
 
-    // Add getters and setters
+    public void setModuleId(int moduleId) {
+        this.moduleId = moduleId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getNumHours() {
+        return numHours;
+    }
+
+    public void setNumHours(int numHours) {
+        this.numHours = numHours;
+    }
+
+    
 }
 

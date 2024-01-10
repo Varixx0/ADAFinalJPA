@@ -29,5 +29,39 @@ public class Student {
     @JoinColumn(name = "CODGRUPO", foreignKey = @ForeignKey(name = "FK_GROUP_STUDENT"))
     private Group group;
 
-    // Add getters and setters
+   //Setters y Getters
+
+    public String getNia() {
+        return nia;
+    }
+
+    public void setNia(String nia) {
+        this.nia = nia;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+    
+    
 }

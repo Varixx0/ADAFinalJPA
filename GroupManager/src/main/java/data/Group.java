@@ -20,7 +20,33 @@ public class Group {
     @Column(name = "AULA")
     private String classroom;
 
-    // Add getters and setters
+   // Setters y Getters
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getClassroom() {
+        return classroom;
+    }
+
+    public void setClassroom(String classroom) {
+        this.classroom = classroom;
+    }
+    
+    
 }
 
 
