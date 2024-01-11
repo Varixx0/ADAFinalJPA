@@ -3,6 +3,7 @@ package com.groupmanager;/*
    Unicamente el punto de inicio, redirige a la clase controlador que se encarga del resto de cosas
  */
 
+import controller.Deletes;
 import controller.Inserts;
 import entity.Enrollment;
 import entity.Group;
@@ -21,16 +22,18 @@ import javax.persistence.Persistence;
 public class GroupManager {
 
     public static void main(String[] args) {
-        Group groupTest = new Group(8, "Descripcion de prueba" , "DAM22");
-        Student studentTest = new Student("Eje20" , "Ejemplo" ,"Ejemplo", groupTest);
-        Project projectTest = new Project("Ej2", "Ejemplo", studentTest); 
-        Module moduleTest= new Module(422, "Ejemplo" , 2);
-        Enrollment enrollmentTest = new Enrollment(422, "Ejemplo", studentTest, moduleTest);
+        Group groupTest = new Group(1, "Ejemplo" , "DamT"); 
+        Student studentTest= new Student("NiaEj", "Whatever" ,"Michael" , groupTest); 
+        Module moduleTest= new Module(1, "Blablabla" , 3); 
+        Project projectTest = new Project("Test" , "Ejemplo" , studentTest);
+        Enrollment enrollmentTest=new Enrollment(1, "Desc" , studentTest, moduleTest);
         
-      Inserts.insertGroup(groupTest);
-      Inserts.insertStudent(studentTest);
-      Inserts.insertModule(moduleTest);
-      Inserts.insertProject(projectTest);
-      Inserts.insertEnrollment(enrollmentTest);
+        
+        
+        System.out.println("Que comience la purga");
+        Deletes.deleteEnrollment(enrollmentTest);
+        Deletes.deleteModule(moduleTest);
+        Deletes.deleteStudent(studentTest);
+        Deletes.deleteGroup(groupTest);
     }
 }
