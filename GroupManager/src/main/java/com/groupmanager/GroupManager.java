@@ -10,10 +10,12 @@ import entity.Group;
 import entity.Project;
 import entity.Student;
 import entity.Module;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 /**
  *
@@ -22,18 +24,27 @@ import javax.persistence.Persistence;
 public class GroupManager {
 
     public static void main(String[] args) {
-        Group groupTest = new Group(1, "Ejemplo" , "DamT"); 
-        Student studentTest= new Student("NiaEj", "Whatever" ,"Michael" , groupTest); 
-        Module moduleTest= new Module(1, "Blablabla" , 3); 
-        Project projectTest = new Project("Test" , "Ejemplo" , studentTest);
-        Enrollment enrollmentTest=new Enrollment(1, "Desc" , studentTest, moduleTest);
-        
-        
-        
-        System.out.println("Que comience la purga");
-        Deletes.deleteEnrollment(enrollmentTest);
-        Deletes.deleteModule(moduleTest);
-        Deletes.deleteStudent(studentTest);
-        Deletes.deleteGroup(groupTest);
+        Group testGroup1 = new Group(1, "Ejemplo", "Ejemplo2");
+        Group testGroup2 = new Group(2, "Ejemplo 3", "Ejemplo4");
+        Group testGroup3 = new Group(3, "Ejemplo4", "Ejemplo5");
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+
+        String jpql = "SELECT g FROM Group g";
+        Query query = em.createQuery(jpql);
+
+        // Obtener la lista de estudiantes
+        List<Group> groups = query.getResultList();
+
+        System.out.println("He llegado");
+        for (int i = 0; i < groups.size(); i++) {
+            String elemento = groups.get(i).getDescription();
+            System.out.println(elemento);
+        }
+        System.out.println("He pasado");
+        // Cierra el EntityManager cuando hayas terminado
+        em.close();
+
     }
 }
