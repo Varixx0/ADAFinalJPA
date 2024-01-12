@@ -91,6 +91,7 @@ public class Selects {
         em.close();
         return registroLeido; 
     }
+    /////////////////////////////////////SELECT ALL/////////////////////////////////////
     /*
         selectAllGroups hace un select all en la tabla GRUPO utilizando JPQL
         @Returns: Una lista de objetos Group

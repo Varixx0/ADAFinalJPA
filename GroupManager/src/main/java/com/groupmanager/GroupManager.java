@@ -5,6 +5,7 @@ package com.groupmanager;/*
 
 import controller.Deletes;
 import controller.Inserts;
+import controller.*;
 import entity.Enrollment;
 import entity.Group;
 import entity.Project;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import view.*;
 
 /**
  *
@@ -27,24 +29,26 @@ public class GroupManager {
         Group testGroup1 = new Group(1, "Ejemplo", "Ejemplo2");
         Group testGroup2 = new Group(2, "Ejemplo 3", "Ejemplo4");
         Group testGroup3 = new Group(3, "Ejemplo4", "Ejemplo5");
+       
+        
+        Student estudiante1 = new Student("123456", "Juan", "Pérez", testGroup1);
+        Student estudiante2 = new Student("789012", "María", "Gómez", testGroup2);
+        Student estudiante3 = new Student("345678", "Carlos", "López", testGroup1);
+        
+        entity.Module modulo1 = new Module(1, "M01", 20);
+        entity.Module modulo2 = new Module(2, "M02", 30);
+        entity.Module modulo3 = new Module(3, "M03", 402);
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
-        EntityManager em = emf.createEntityManager();
-
-        String jpql = "SELECT g FROM Group g";
-        Query query = em.createQuery(jpql);
-
-        // Obtener la lista de estudiantes
-        List<Group> groups = query.getResultList();
-
-        System.out.println("He llegado");
-        for (int i = 0; i < groups.size(); i++) {
-            String elemento = groups.get(i).getDescription();
-            System.out.println(elemento);
-        }
-        System.out.println("He pasado");
-        // Cierra el EntityManager cuando hayas terminado
-        em.close();
-
+        // Crear tres instancias de la clase Enrollment utilizando constructores
+        Enrollment matricula1 = new Enrollment(1, "Matrícula Primer Semestre", estudiante1, modulo1);
+        Enrollment matricula2 = new Enrollment(2, "Matrícula Primer Semestre", estudiante2, modulo2);
+        Enrollment matricula3 = new Enrollment(3, "Matrícula Primer Semestre", estudiante3, modulo3);
+        
+        
+        
+        
+       Menus.printModuleData();
     }
 }
+
+

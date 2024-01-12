@@ -8,10 +8,12 @@ import entity.Group;
 import entity.Student;
 import entity.Module;
 import entity.Project;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 /**
  *
@@ -119,5 +121,85 @@ public class Deletes {
 
         em.close();
         emf.close();
+    }
+    
+   ////////////////////////////////////////(NUKES [!])////////////////////////////////////////
+    
+    //deleteAll Borra todas las entradas de la tabla especificada mediante JPQL
+    
+    public static void deleteAllGroups(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        String jpql = "DELETE FROM Group";
+        Query query = em.createQuery(jpql);
+        query.executeUpdate();
+        
+        transaction.commit();
+        
+        em.close();
+    }
+     public static void deleteAllStudents(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        String jpql = "DELETE FROM Student";
+        Query query = em.createQuery(jpql);
+        query.executeUpdate();
+        
+        transaction.commit();
+        
+        em.close();
+    }
+      public static void deleteAllEnrollments(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+        
+        String jpql = "DELETE FROM Enrollment";
+        Query query = em.createQuery(jpql);
+        query.executeUpdate();
+        
+        transaction.commit();
+        
+        em.close();
+    }
+       public static void deleteAllModules(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        String jpql = "DELETE FROM Module";
+        Query query = em.createQuery(jpql);
+        query.executeUpdate();
+        
+        transaction.commit();
+        
+        em.close();
+    }
+        public static void deleteAllProjects(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        String jpql = "DELETE FROM Project";
+        Query query = em.createQuery(jpql);
+        query.executeUpdate();
+        
+        transaction.commit();
+        
+        em.close();
     }
 }

@@ -61,9 +61,18 @@ public class Enrollment {
         this.module = module;
     }
 
-    public Enrollment() {
+    public Student getStudent() {
+        return student;
     }
 
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+    
+    
+    public Enrollment() {
+    }
+    
     public Enrollment(int id, String description, Student student, Module module) {
         this.description = description;
         this.module = module;
