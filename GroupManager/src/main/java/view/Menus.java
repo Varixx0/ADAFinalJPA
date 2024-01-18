@@ -5,6 +5,7 @@ package view;
 import controller.*;
 import entity.Enrollment;
 import entity.Group;
+import entity.Project;
 import entity.Student;
 import java.util.List;
 
@@ -41,11 +42,11 @@ public class Menus {
     //printItemsCounterFormatted recoge la cantidad de entidades que tiene la base de datos y las imprime con formato
     public static void printItemCounterFormatted(){
         //Conseguimos los registros de la base de datos
-        int groupItemCount = mainController.returnGroupsItemCount();
-        int studentItemCount= mainController.returnStudentsItemCount();
-        int enrollmentItemCount= mainController.returnEnrollmentsItemCount();
-        int moduleItemCount= mainController.returnModulesItemCount();
-        int projectItemCount= mainController.returnProjectsItemCount();
+        int groupItemCount = MainController.returnGroupsItemCount();
+        int studentItemCount= MainController.returnStudentsItemCount();
+        int enrollmentItemCount= MainController.returnEnrollmentsItemCount();
+        int moduleItemCount= MainController.returnModulesItemCount();
+        int projectItemCount= MainController.returnProjectsItemCount();
         
         
         String formato = "| %-40s | %-3d |%n"; // Ajusta el formato según tus necesidades
@@ -71,6 +72,10 @@ public class Menus {
         System.out.println("ATENCION [!]: La opcion que has seleccionado borrara todas las entradas de la base de datos");
         System.out.println("¿Estas seguro de que quieres continuar? Pulsa cualquier tecla para continuar. Pulsa X para abortar.");
     }
+    
+    //////////////////////////////////////////////////////////////  IMPRIMIR LOS DATOS CON FORMATO  //////////////////////////////////////////////////////////////  
+    
+    //Imprime los datos de la tabla Grupo
     public static void printGroupData(){
         List<Group> groups = Selects.selectAllGroups();
          
@@ -93,6 +98,8 @@ public class Menus {
         // Imprime la línea inferior de la celda
         System.out.format("+-----------------+----------------------+-----------------+%n");
     }
+    
+    //Imprime los datos de la tabla Estudiante
     public static void printStudentData(){
         List<Student> students = Selects.selectAllStudents();
         
@@ -114,7 +121,29 @@ public class Menus {
         // Imprime la línea inferior de la celda
         System.out.format("+------------+----------------------+----------------------+-----------------+%n");
     }
+    public static void printStudentWithoutProjectData(){
+        List<Student> students = Selects.getStudentsWithoutProject();
+        
+        String formatoDatos = "| %-10s | %-20s | %-20s | %-15s |%n";
+
+        // Imprime la línea superior de la celda
+        System.out.format("+------------+----------------------+----------------------+-----------------+%n");
+
+        // Imprime la cabecera con los nombres de las variables
+        System.out.format(formatoDatos, "NIA", "Nombre", "Apellidos", "Grupo");
+
+        // Imprime la línea de separación entre la cabecera y los datos
+        System.out.format("+------------+----------------------+----------------------+-----------------+%n");
+
+         for (Student student: students) {
+           System.out.format(formatoDatos, student.getNia(), student.getName(), student.getLastName(), student.getGroup().getClassroom());   
+        }
+
+        // Imprime la línea inferior de la celda
+        System.out.format("+------------+----------------------+----------------------+-----------------+%n");
+    }
     
+    //Imprime los datos de la tabla Matricula
     public static void printEnrollmentData(){
        List<Enrollment> enrollments = Selects.selectAllEnrollments();
         
@@ -138,6 +167,7 @@ public class Menus {
 
     }
     
+    //Imprime los datos de la tabla Modulo
     public static void printModuleData(){
         
         List<entity.Module> modules = Selects.selectAllModules();
@@ -162,5 +192,26 @@ public class Menus {
     
     }
     
-    
+    //Imprime los datos de la tabla Projecto
+    public static void printProjectData(){
+        List<Project> projects = Selects.selectAllProjects(); 
+        String formatoCabecera = "| %-15s | %-30s | %-22s |%n";
+        String formatoDatos = "| %-15s | %-30s | %-22s |%n";
+
+        // Imprime la línea superior de la celda
+        System.out.format("+-----------------+--------------------------------+------------------------+%n");
+
+        // Imprime la cabecera con los nombres de las variables
+        System.out.format(formatoCabecera, "Id Proyecto", "Titulo", "Alumno");
+
+        // Imprime la línea de separación entre la cabecera y los datos
+        System.out.format("+-----------------+--------------------------------+------------------------+%n");
+
+       for (Project project: projects) {
+           System.out.format(formatoDatos, project.getProjectId(), project.getTitle(), project.getStudent().getName() + " " + project.getStudent().getLastName());   
+        }
+
+        // Imprime la línea inferior de la celda
+        System.out.format("+-----------------+--------------------------------+------------------------+%n");
+    }
 }
