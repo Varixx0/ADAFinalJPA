@@ -50,8 +50,7 @@ public class GroupManager {
         
         
       
-      MainController.insertProjectController();
-       
+        MainController.starter();
        
     }
     
