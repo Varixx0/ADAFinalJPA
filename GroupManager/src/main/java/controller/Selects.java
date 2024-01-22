@@ -144,7 +144,7 @@ public class Selects {
     ///////////////////////SELECTS STUDENT///////////////////////////////
 
     // Método para obtener un estudiante por NIA
-    public Student findStudentByNia(String nia) {
+    public static Student findStudentByNia(String nia) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -158,7 +158,7 @@ public class Selects {
     }
 
     // Método para obtener estudiantes por nombre
-    public List<Student> findStudentsByName(String name) {
+    public static List<Student> findStudentsByName(String name) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -186,7 +186,7 @@ public class Selects {
     }
 
     // Método para obtener estudiantes por grupo
-    public List<Student> findStudentsByGroup(Group group) {
+    public static List<Student> findStudentsByGroup(Group group) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -201,7 +201,7 @@ public class Selects {
 
     ////////////////////////////////SELECTS GROUPS/////////////////////////////
     // Método para obtener un grupo por ID
-    public Group findGroupById(int groupId) {
+    public static Group findGroupById(int groupId) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -215,7 +215,7 @@ public class Selects {
     }
 
     // Método para obtener grupos por descripción
-    public List<Group> findGroupsByDescription(String description) {
+    public static List<Group> findGroupsByDescription(String description) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -229,7 +229,7 @@ public class Selects {
     }
 
     // Método para obtener grupos por aula
-    public List<Group> findGroupsByClassroom(String classroom) {
+    public static List<Group> findGroupsByClassroom(String classroom) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -245,7 +245,7 @@ public class Selects {
     ///////////////////////////////////////SELECTS MODULE//////////////////////////////////
     
     // Método para obtener un módulo por ID
-    public Module findModuleById(int moduleId) {
+    public static entity.Module findModuleById(int moduleId) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -259,7 +259,7 @@ public class Selects {
     }
 
     // Método para obtener módulos por descripción
-    public List<Module> findModulesByDescription(String description) {
+    public static List<entity.Module> findModulesByDescription(String description) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -273,7 +273,7 @@ public class Selects {
     }
 
     // Método para obtener módulos por número de horas
-    public List<Module> findModulesByNumHours(int numHours) {
+    public static List<entity.Module> findModulesByNumHours(int numHours) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
@@ -285,4 +285,107 @@ public class Selects {
             emf.close();
         }
     }
+    
+    ///////////////////////////////////// SELECTS PROJECT /////////////////////////////
+    
+    // Método para obtener un proyecto por ID
+    public static Project findProjectById(String projectId) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Project> query = em.createNamedQuery("Project.findById", Project.class);
+            query.setParameter("projectId", projectId);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener proyectos por título
+    public static List<Project> findProjectsByTitle(String title) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Project> query = em.createNamedQuery("Project.findById", Project.class);
+            query.setParameter("title", title);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener proyectos por estudiante
+    public static List<Project> findProjectsByStudent(Student student) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Project> query = em.createNamedQuery("Project.findById", Project.class);
+            query.setParameter("student", student);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+    
+    //////////////////////////////////////////SELECTS ENROLLMENT /////////////////////////////////////////////
+     public static Enrollment findEnrollmentById(int idEnrollment) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findById", Enrollment.class);
+            query.setParameter("idEnrollment", idEnrollment);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener matrículas por descripción
+    public static List<Enrollment> findEnrollmentsByDescription(String description) {
+       EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findById", Enrollment.class);
+            query.setParameter("description", description);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+
+    }
+
+    // Método para obtener matrículas por estudiante
+    public static List<Enrollment> findEnrollmentsByStudent(Student student) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findById", Enrollment.class);
+            query.setParameter("student", student);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener matrículas por módulo
+    public static List<Enrollment> findEnrollmentsByModule(entity.Module module) {
+       EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findById", Enrollment.class);
+            query.setParameter("module", module);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+    
+    
 }

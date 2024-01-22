@@ -213,8 +213,8 @@ public class Menus {
 
     //////////////////////////////////////////////////////////////  IMPRIMIR LOS DATOS CON FORMATO  //////////////////////////////////////////////////////////////  
     //Imprime los datos de la tabla Grupo
-    public static void printGroupData() {
-        List<Group> groups = Selects.selectAllGroups();
+    public static void printGroupData(List<Group> groups) {
+       
         if (groups.size() != 0) {
             String formatoCabecera = "| %-15s | %-20s | %-15s |%n";
             String formatoDatos = "| %-15d | %-20s | %-15s |%n";
@@ -240,8 +240,8 @@ public class Menus {
     }
 
     //Imprime los datos de la tabla Estudiante
-    public static void printStudentData() {
-        List<Student> students = Selects.selectAllStudents();
+    public static void printStudentData(List<Student> students) {
+        
         if (students.size() != 0) {
             String formatoDatos = "| %-10s | %-20s | %-20s | %-15s |%n";
 
@@ -288,9 +288,8 @@ public class Menus {
     }
 
     //Imprime los datos de la tabla Matricula
-    public static void printEnrollmentData() {
-        List<Enrollment> enrollments = Selects.selectAllEnrollments();
-
+    public static void printEnrollmentData(List<Enrollment> enrollments) {
+        
         String formatoDatos = "| %-14s | %-25s | %-20s | %-20s |%n";
 
         // Imprime la línea superior de la celda
@@ -312,9 +311,9 @@ public class Menus {
     }
 
     //Imprime los datos de la tabla Modulo
-    public static void printModuleData() {
+    public static void printModuleData(List<entity.Module> modules) {
 
-        List<entity.Module> modules = Selects.selectAllModules();
+        
         String formatoCabecera = "| %-15s | %-30s | %-22s |%n";
         String formatoDatos = "| %-15d | %-30s | %-22d |%n";
 
@@ -337,8 +336,8 @@ public class Menus {
     }
 
     //Imprime los datos de la tabla Projecto
-    public static void printProjectData() {
-        List<Project> projects = Selects.selectAllProjects();
+    public static void printProjectData(List<Project> projects) {
+        
         String formatoCabecera = "| %-15s | %-30s | %-22s |%n";
         String formatoDatos = "| %-15s | %-30s | %-22s |%n";
 

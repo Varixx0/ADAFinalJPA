@@ -137,7 +137,7 @@ public class MainController {
             id = scanInt();
             //Si pones ID:0 acaba el modo insercion
             if (id != 0) {
-                if (Selects.selectGroupByID(id) == null) {//Si es nulo lo puede crear porque significaque el ID que intentas introducir no lo esta gastando ningun grupo en la base de datos
+                if (Selects.findGroupById(id)== null) {//Si es nulo lo puede crear porque significaque el ID que intentas introducir no lo esta gastando ningun grupo en la base de datos
                     //No tienen ninguna comprobacion porque se acepta todo tipo de respuestas, incluido la string vacia. 
                     System.out.println("Introduce la Descripcion del Grupo:");
                     description = scanString();
@@ -174,7 +174,7 @@ public class MainController {
                 nia = scanString();
                 if (!nia.equals("0")) {
                     if (validateNiaStudent(nia)) {//Esta parte es realmente desesperante asi que si en las pruebas da muchos problemas tal vez habria que quitarlo.
-                        if (Selects.selectStudentByID(nia) == null) {
+                        if (Selects.findStudentByNia(nia) == null) {
                             validNia = true;
                         } else {
                             System.out.println("El nia que has introducido ya lo tiene otro alumno en la base de datos, por favor introduzca uno nuevo");
@@ -216,12 +216,12 @@ public class MainController {
         Group group = new Group();
         if (returnGroupsItemCount() != 0) {
             System.out.println("Elige uno de los siguientes Grupos ya creados o crea uno nuevo metiendo un indice que aun no exista diferente de cero: ");
-            Menus.printGroupData();
+            Menus.printGroupData(Selects.selectAllGroups());
             System.out.println("Introduce el numero de identificacion que quiera utilizar: ");
             int selecction = scanInt();
-            if (Selects.selectGroupByID(selecction) != null) {//Si es nulo lo puede crear porque significaque el ID que intentas introducir no lo esta gastando ningun grupo en la base de datos
+            if (Selects.findGroupById(selecction) != null) {//Si es nulo lo puede crear porque significaque el ID que intentas introducir no lo esta gastando ningun grupo en la base de datos
                 //La consulta se vuelve a hacer, un poco redundante quizas pero no queria tener una variable mas en este metodo.
-                Group groupSelected = Selects.selectGroupByID(selecction);
+                Group groupSelected = Selects.findGroupById(selecction);
                 return groupSelected;
             } else {//Si no es nulo significa que ya hay un objeto con ese ID en la base de datos y por tanto no puede utilizarlo
                 System.out.println("Ha seleccionado un id que no esta en la base de datos,  el grupo es necesario para insertar a un alumo en la base de datos. Tienes tres opciones");
@@ -291,7 +291,7 @@ public class MainController {
             idModule = scanInt();
             //si el modulo es distinto de continua creando el Modulo
             if (idModule != 0) {
-                if (Selects.selectModuleByID(idModule) == null) {//Busca el Modulo en la base de datos, si lo encuentra salta al else, sino lo crea.
+                if (Selects.findEnrollmentById(idModule) == null) {//Busca el Modulo en la base de datos, si lo encuentra salta al else, sino lo crea.
                     System.out.println("Por favor introduce la descripción del modulo");
                     description = scanString();
                     System.out.println("Introduce el numero de horas del modulo");
@@ -325,7 +325,7 @@ public class MainController {
             idEnrollment = scanInt();
             if (idEnrollment != 0) {
                 //Busca la matricula en la base de datos para ver si hay alguna con el ID que queremos introducir. 
-                if (Selects.selectEnrollmentByID(idEnrollment) == null) {
+                if (Selects.findEnrollmentById(idEnrollment) == null) {
                     System.out.println("Introduce la descripcion de la matricula");
                     description = scanString();
 
@@ -355,12 +355,12 @@ public class MainController {
         System.out.println("Para crear una Matricula debes seleccionar un estudiante al que matricular");
         if (Selects.selectAllStudents() != null) {
             System.out.println("Hemos encontrado los siguientes alumnos en la base de datos");
-            Menus.printStudentData();
+            Menus.printStudentData(Selects.selectAllStudents());
             System.out.println("Escribe el NIA del alumno que quieras seleccionar");
             String nia = scanString();
-            if (Selects.selectStudentByID(nia) != null) {
+            if (Selects.findStudentByNia(nia) != null) {
                 //El select se hace dos veces pero eso me parecia mejor que crear una variable mas para esta clase que solo se iba a utilizar una vez. Si necesitaramos optimizar las entradas a la base de datos podriamos cambiarlo. 
-                student = Selects.selectStudentByID(nia);
+                student = Selects.findStudentByNia(nia);
                 return student;
             } else {//Si no encuentra el alumno en la base de datos significa que el nia seleccionado no existe. Si fuera necesario optimizarlo mas podriamos ahorrarnos esta consulta simplemente guardandonos la lista de estudiantes en la request original, sin embargo considere que asi era mejor porque podia aislar la representacion de los estudiantes en la clase de menus
                 System.out.println("[!]El nia que has seleccionado no existe en la base de datos. ");
@@ -416,11 +416,11 @@ public class MainController {
         System.out.println("Para crear una Matricula debes seleccionar un modulo al que asignar el alumno");
         if (Selects.selectAllModules() != null) {//comprubea si hay algun modulo en la base de datos
             System.out.println("Hemos encontrado los siguientes modulos en la base de datos");
-            Menus.printModuleData();
+            Menus.printModuleData(Selects.selectAllModules());
             System.out.println("Escribe el id del modulo que quieras seleccionar");
             int idModule = scanInt();
-            if (Selects.selectModuleByID(idModule) != null) {//Comprueba si el id seleccionado existe en la base de datos
-                module = Selects.selectModuleByID(idModule);
+            if (Selects.findModuleById(idModule) != null) {//Comprueba si el id seleccionado existe en la base de datos
+                module = Selects.findModuleById(idModule);
                 return module;
             } else {//Si no existe da las siguientes opciones
                 System.out.println("[!]El id de modulo  que has seleccionado no existe en la base de datos. ");
@@ -484,7 +484,7 @@ public class MainController {
             idProject = scanString();
             if (!idProject.equals("0")) {
                 //Busca el proyecto en la base de datos, si lo encuentra crea el objeto. Sino lo encuentra sera null y por tanto significa que puedes utilizar ese ID
-                if (Selects.selectProjectByID(title) == null) {
+                if (Selects.findProjectById(idProject) == null) {
                     //No tiene ninguna comprobacion ya que se puede dejar en blanco
                     System.out.println("Introduce el titulo del proyecto: ");
                     title = scanString();
@@ -515,7 +515,7 @@ public class MainController {
             String nia = scanString();
             //Busca el NIA en la base de datos
             if (Selects.findStudentByNia(nia)!= null) {
-                student = Selects.findStudentsByNia(nia);
+                student = Selects.findStudentByNia(nia);
                 return student;
             } else {
                 System.out.println("[!]El nia que has seleccionado no existe en la base de datos. ");
@@ -621,7 +621,7 @@ public class MainController {
         switch (selecction) {
             case 1:
                 //Momentaneo ya que hay que actualizar a la version pro completa
-                Menus.printGroupData();
+                Menus.printGroupData(Selects.selectAllGroups());
                 waitingKey();
                 mainMenuController();
                 break;
@@ -659,7 +659,7 @@ public class MainController {
         switch (selecction) {
             case 1:
                 //Momentaneo ya que hay que actualizar a la version pro completa
-                Menus.printStudentData();
+                Menus.printStudentData(Selects.selectAllStudents());
                 waitingKey();
                 mainMenuController();
                 break;
@@ -700,7 +700,7 @@ public class MainController {
         switch (selecction) {
             case 1:
                 //Momentaneo ya que hay que actualizar a la version pro completa
-                Menus.printModuleData();
+                Menus.printModuleData(Selects.selectAllModules());
                 waitingKey();
                 mainMenuController();
                 break;
@@ -741,7 +741,7 @@ public class MainController {
         switch (selecction) {
             case 1:
                 //Momentaneo ya que hay que actualizar a la version pro completa
-                Menus.printEnrollmentData();
+                Menus.printEnrollmentData(Selects.selectAllEnrollments());
                 waitingKey();
                 mainMenuController();
                 break;
@@ -782,7 +782,7 @@ public class MainController {
         switch (selecction) {
             case 1:
                 //Momentaneo ya que hay que actualizar a la version pro completa
-                Menus.printProjectData();
+                Menus.printProjectData(Selects.selectAllProjects());
                 waitingKey();
                 mainMenuController();
                 break;
