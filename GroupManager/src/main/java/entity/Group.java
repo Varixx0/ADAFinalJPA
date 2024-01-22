@@ -9,11 +9,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 
 @Entity
 @Table(name = "GRUPO_VT04")
+@NamedQueries({
+    @NamedQuery(name = "Group.findById", query = "SELECT g FROM Group g WHERE g.groupId = :groupId"),
+    @NamedQuery(name = "Group.findByDescription", query = "SELECT g FROM Group g WHERE g.description = :description"),
+    @NamedQuery(name = "Group.findByClassroom", query = "SELECT g FROM Group g WHERE g.classroom = :classroom")
+})
 public class Group {
 
     @Id

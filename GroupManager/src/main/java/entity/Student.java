@@ -11,10 +11,18 @@ import javax.persistence.ForeignKey;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 
 @Entity
 @Table(name = "ALUMNO_VT04")
+@NamedQueries({
+    @NamedQuery(name = "Student.findByNia", query = "SELECT s FROM Student s WHERE s.nia = :nia"),
+    @NamedQuery(name = "Student.findByName", query = "SELECT s FROM Student s WHERE s.name = :name"),
+    @NamedQuery(name = "Student.findByLastName", query = "SELECT s FROM Student s WHERE s.lastName = :lastName"),
+    @NamedQuery(name = "Student.findByGroup", query = "SELECT s FROM Student s WHERE s.group = :group")
+})
 public class Student {
     @Id
     @Column(name = "NIA")

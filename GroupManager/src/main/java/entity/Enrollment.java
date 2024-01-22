@@ -12,9 +12,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
 @Table(name = "MATRICULA_VT04")
+@NamedQueries({
+    @NamedQuery(name = "Enrollment.findById", query = "SELECT e FROM Enrollment e WHERE e.idEnrollment = :idEnrollment"),
+    @NamedQuery(name = "Enrollment.findByStudent", query = "SELECT e FROM Enrollment e WHERE e.student = :student"),
+    @NamedQuery(name = "Enrollment.findByModule", query = "SELECT e FROM Enrollment e WHERE e.module = :module"),
+    @NamedQuery(name = "Enrollment.findByDescription", query = "SELECT e FROM Enrollment e WHERE e.description = :description")
+})
 public class Enrollment {
     
     @Id

@@ -11,9 +11,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
 @Table(name = "PROYECTO_CONVOCATORIA_VT04")
+@NamedQueries({
+    @NamedQuery(name = "Project.findById", query = "SELECT p FROM Project p WHERE p.projectId = :projectId"),
+    @NamedQuery(name = "Project.findByTitle", query = "SELECT p FROM Project p WHERE p.title = :title"),
+    @NamedQuery(name = "Project.findByStudent", query = "SELECT p FROM Project p WHERE p.student = :student")
+})
 public class Project {
     @Id
     @Column(name = "CODPROYECTO")

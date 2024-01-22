@@ -7,9 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
 @Table(name = "MODULO_VT04")
+@NamedQueries({
+    @NamedQuery(name = "Module.findById", query = "SELECT m FROM Module m WHERE m.moduleId = :moduleId"),
+    @NamedQuery(name = "Module.findByDescription", query = "SELECT m FROM Module m WHERE m.description = :description"),
+    @NamedQuery(name = "Module.findByNumHours", query = "SELECT m FROM Module m WHERE m.numHours = :numHours")
+})
 public class Module {
     @Id
     @Column(name = "CODMODULO")

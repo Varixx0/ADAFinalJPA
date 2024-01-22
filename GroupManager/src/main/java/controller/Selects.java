@@ -9,104 +9,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
  * @author victortercero
  */
 public class Selects {
-
-    /*
-        selectGroupByID hace un select en la base de datos de  GRUPO
-        @Param: int id, la Primary Key de la tabla GRUPO
-        @Returns: El objeto Group si lo encuentra. Si no lo encuentra salta un error que posteriormente manejaremos
-     */
-    public static Group selectGroupByID(int id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            Group registroLeido = em.find(Group.class, id);
-            return registroLeido;
-        } finally {
-            em.close();
-            emf.close();
-        }
-    }
-
-    /*
-        selectStudentByID hace un select en la base de datos de  ALUMNO
-        @Param: String id, haciendo referencia al nia, la Primary Key de la tabla GRUPO
-        @Returns: El objeto Student si lo encuentra. Si no lo encuentra salta un error que posteriormente manejaremos
-     */
-    public static Student selectStudentByID(String id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            Student registroLeido = em.find(Student.class, id);
-            return registroLeido;
-        } finally {
-            em.close();
-            emf.close();
-        }
-    }
-
-    /*
-        selectEnrollmentByID hace un select en la base de datos de  MATRICULA
-        @Param: int id, la Primary Key de la tabla MATRICULA
-        @Returns: El objeto Enrollment si lo encuentra. Si no lo encuentra salta un error que posteriormente manejaremos
-     */
-    public static Enrollment selectEnrollmentByID(int id) {
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            Enrollment registroLeido = em.find(Enrollment.class, id);
-            return registroLeido;
-        } finally {
-            em.close();
-            emf.close();
-        }
-    }
-
-    /*
-        selectModulesByID hace un select en la base de datos de  MODULO
-        @Param: ind id, la Primary Key de la tabla MODULO
-        @Returns: El objeto Module si lo encuentra. Si no lo encuentra salta un error que posteriormente manejaremos
-     */
-    public static entity.Module selectModuleByID(int id) {
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            entity.Module registroLeido = em.find(entity.Module.class, id);
-            return registroLeido;
-        } finally {
-            em.close();
-            emf.close();
-        }
-    }
-
-    /*
-        selectProjectByID hace un select en la base de datos de  PROYECTO_CONVOCATORIA
-        @Param: ind id, la Primary Key de la tabla PROYECTO_CONVOCATORIA
-        @Returns: El objeto Project si lo encuentra. Si no lo encuentra salta un error que posteriormente manejaremos
-     */
-    public static Project selectProjectByID(String id) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
-        EntityManager em = emf.createEntityManager();
-
-        try {
-            Project registroLeido = em.find(Project.class, id);
-            return registroLeido;
-        } finally {
-            em.close();
-            emf.close();
-        }
-    }
 
     /////////////////////////////////////SELECT ALL/////////////////////////////////////
     /*
@@ -198,8 +107,9 @@ public class Selects {
 
         return projects;
     }
-    public static List<Student> getStudentsWithoutProject(){
-      EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+
+    public static List<Student> getStudentsWithoutProject() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -207,12 +117,12 @@ public class Selects {
             em.getTransaction().begin();
 
             // Construir la consulta JPQL corregida
-            String jpql = "SELECT s FROM Student s " +
-                          "WHERE NOT EXISTS (" +
-                          "    SELECT p FROM Project p " +
-                          "    WHERE p.student = s" +
-                          ")";
-            
+            String jpql = "SELECT s FROM Student s "
+                    + "WHERE NOT EXISTS ("
+                    + "    SELECT p FROM Project p "
+                    + "    WHERE p.student = s"
+                    + ")";
+
             // Crear la consulta
             Query query = em.createQuery(jpql);
 
@@ -226,8 +136,152 @@ public class Selects {
         } finally {
             // Cerrar el EntityManager
             em.close();
-            
+
             // Cerrar el EntityManagerFactory
+            emf.close();
+        }
+    }
+    ///////////////////////SELECTS STUDENT///////////////////////////////
+
+    // Método para obtener un estudiante por NIA
+    public Student findStudentByNia(String nia) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Student> query = em.createNamedQuery("Student.findByNia", Student.class);
+            query.setParameter("nia", nia);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener estudiantes por nombre
+    public List<Student> findStudentsByName(String name) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Student> query = em.createNamedQuery("Student.findByNia", Student.class);
+            query.setParameter("name", name);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener estudiantes por apellidos
+    public List<Student> findStudentsByLastName(String lastName) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Student> query = em.createNamedQuery("Student.findByNia", Student.class);
+            query.setParameter("lastname", lastName);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener estudiantes por grupo
+    public List<Student> findStudentsByGroup(Group group) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Student> query = em.createNamedQuery("Student.findByNia", Student.class);
+            query.setParameter("group", group);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    ////////////////////////////////SELECTS GROUPS/////////////////////////////
+    // Método para obtener un grupo por ID
+    public Group findGroupById(int groupId) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Group> query = em.createNamedQuery("Group.findById", Group.class);
+            query.setParameter("groupId", groupId);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener grupos por descripción
+    public List<Group> findGroupsByDescription(String description) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Group> query = em.createNamedQuery("Group.findById", Group.class);
+            query.setParameter("description", description);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener grupos por aula
+    public List<Group> findGroupsByClassroom(String classroom) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Group> query = em.createNamedQuery("Group.findById", Group.class);
+            query.setParameter("classroom", classroom);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+    
+    ///////////////////////////////////////SELECTS MODULE//////////////////////////////////
+    
+    // Método para obtener un módulo por ID
+    public Module findModuleById(int moduleId) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<entity.Module> query = em.createNamedQuery("Module.findById", entity.Module.class);
+            query.setParameter("moduleId", moduleId);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener módulos por descripción
+    public List<Module> findModulesByDescription(String description) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<entity.Module> query = em.createNamedQuery("Module.findById", entity.Module.class);
+            query.setParameter("description", description);
+            return query.getResultList();
+        } finally {
+            em.close();
+            emf.close();
+        }
+    }
+
+    // Método para obtener módulos por número de horas
+    public List<Module> findModulesByNumHours(int numHours) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<entity.Module> query = em.createNamedQuery("Module.findById", entity.Module.class);
+            query.setParameter("numHours", numHours);
+            return query.getResultList();
+        } finally {
+            em.close();
             emf.close();
         }
     }

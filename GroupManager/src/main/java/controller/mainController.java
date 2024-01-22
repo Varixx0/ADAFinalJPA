@@ -514,8 +514,8 @@ public class MainController {
             System.out.println("Escribe el NIA del alumno que quieras seleccionar");
             String nia = scanString();
             //Busca el NIA en la base de datos
-            if (Selects.selectStudentByID(nia) != null) {
-                student = Selects.selectStudentByID(nia);
+            if (Selects.findStudentByNia(nia)!= null) {
+                student = Selects.findStudentsByNia(nia);
                 return student;
             } else {
                 System.out.println("[!]El nia que has seleccionado no existe en la base de datos. ");

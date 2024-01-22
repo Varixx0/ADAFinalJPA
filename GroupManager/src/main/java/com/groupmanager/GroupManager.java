@@ -49,7 +49,7 @@ public class GroupManager {
         Project testProject3 = new Project ("3" , "Titulo3" , estudiante3);
         
         
-      
+        insertTestData();
         MainController.starter();
        
     }
