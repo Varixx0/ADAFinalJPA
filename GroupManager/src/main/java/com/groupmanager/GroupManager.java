@@ -1,6 +1,11 @@
 package com.groupmanager;/*
  * Esta es la clase que contiene el main de la aplicacion. 
    Unicamente el punto de inicio, redirige a la clase controlador que se encarga del resto de cosas
+
+    Un Apunte que tiene valor en todo el proyecto es que he traducido Modulos como Module, 
+    sin embargo Module es ya una palabra reservada en Java por lo que cada vez que quiero 
+    llamar a Module tengo que especificar que es entity.Module ya que de lo contrario trata 
+    de usar el predefinido de java. Ese es el motivo de porque esta puesto de esa manera
  */
 
 import controller.Deletes;

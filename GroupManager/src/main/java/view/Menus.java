@@ -28,8 +28,9 @@ public class Menus {
         System.out.println("1. Vaciar toda la base de datos");
         System.out.println("2. Añadir un item a la base de datos");
         System.out.println("3. Ver elementos en la base de datos");
-        //Borrar elementos
-        //Salir del programa
+        System.out.println("4. Borrar elementos");
+        System.out.println("5. Salir del Programa");
+       
     }
 
     public static void printGreetings() {
@@ -106,7 +107,7 @@ public class Menus {
         System.out.println("2. Introducir un Alumno");
         System.out.println("3. Introducir una Matricula");
         System.out.println("4. Introducir un Modulo");
-        System.out.println("5. Introducir un proyecto");
+        System.out.println("5. Introducir un Proyecto");
         System.out.println("6. Volver al menu principal");
     }
 
@@ -118,7 +119,7 @@ public class Menus {
         System.out.println("2. Alumnos");
         System.out.println("3. Modulos");
         System.out.println("4. Matriculas");
-        System.out.println("5. proyectos");
+        System.out.println("5. Proyectos");
         System.out.println("6. Volver al menu principal");
     }
 
@@ -176,7 +177,25 @@ public class Menus {
         System.out.println("2. Buscar proyecto por ID");
         System.out.println("3. Buscar proyectos por titulo");
         System.out.println("4. Buscar proyectos por Alumno");
+        System.out.println("5. Volver a la seleccion de consultas");
+        System.out.println("7. Volver al menu principal");
     }
+    
+     //////////////////////////////////////////////////////////////// DELETES //////////////////////////////////////////////////////////
+    public static void deletesMenu(){
+        System.out.println("////////////////////////////");
+        System.out.println("Estas en el menu de borrar");
+        System.out.println("Por favor elija una de las siguientes opciones: ");
+        System.out.println("1. Borrar Grupo");
+        System.out.println("2. Borrar Alumno");
+        System.out.println("3. Borrar Matricula");
+        System.out.println("4. Borrar Modulo");
+        System.out.println("5. Borrar Proyecto");
+        System.out.println("6. Salir al menu principal");
+    
+    }
+    
+     //////////////////////////////////////////////////////////////  IMPRIMIR LOS DATOS CON FORMATO  //////////////////////////////////////////////////////////////  
 
     //printItemsCounterFormatted recoge la cantidad de entidades que tiene la base de datos y las imprime con formato
     public static void printItemCounterFormatted() {
@@ -211,7 +230,6 @@ public class Menus {
         System.out.println("¿Estas seguro de que quieres continuar? Pulsa cualquier tecla para continuar. Pulsa X para abortar.");
     }
 
-    //////////////////////////////////////////////////////////////  IMPRIMIR LOS DATOS CON FORMATO  //////////////////////////////////////////////////////////////  
     //Imprime los datos de la tabla Grupo
     public static void printGroupData(List<Group> groups) {
        

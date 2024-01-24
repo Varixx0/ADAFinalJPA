@@ -20,23 +20,29 @@ public class MainController {
 
     //Pide al usuario un Int por terminal y lo devuelve
     public static int scanInt() {
-        int x = 0;
+        Integer x = null;
         boolean inputValido = false;
 
         do {
             try {
-                x = user.nextInt();
-                user.nextLine();
-                inputValido = true; // Si llega aquí, la entrada es válida y salimos del bucle 
-            } catch (Exception e) {
-                System.out.println("Por favor introduzca un número válido");
-                user.next();
+                String input = user.nextLine().trim();
+
+                if (input.isEmpty()) {
+                    // Si la entrada está vacía, devolvemos null
+                    return 0;
+                }
+
+                x = Integer.parseInt(input);
+                inputValido = true; // Si llega aquí, la entrada es válida y salimos del bucle
+            } catch (NumberFormatException e) {
+                System.out.println("Por favor, introduzca un número válido");
             }
         } while (!inputValido);
 
         return x;
-
     }
+
+    
 
     //Pide al usuario una String por terminal y la devuelve
     public static String scanString() {
@@ -176,7 +182,11 @@ public class MainController {
                 if (!nia.equals("0")) {
                     if (validateNiaStudent(nia)) {//Esta parte es realmente desesperante asi que si en las pruebas da muchos problemas tal vez habria que quitarlo.
                         if (Selects.findStudentByNia(nia) == null) {
+                            if(!nia.equals("")){
                             validNia = true;
+                            }else{
+                                System.out.println("El nia no puede estar vacio");
+                            }
                         } else {
                             System.out.println("El nia que has introducido ya lo tiene otro alumno en la base de datos, por favor introduzca uno nuevo");
                         }
@@ -201,11 +211,7 @@ public class MainController {
 
                 newStudent = new Student(nia, name, lastName, group);
                 Inserts.insertStudent(newStudent);
-            } else {
-                System.out.println("cero detectado correctamente por segunda vez");
             }
-            System.out.println("Final del while");
-            System.out.println(nia);
         }
     }
 
@@ -453,7 +459,7 @@ public class MainController {
                 }
 
             }
-        } else {//Este else se ejecuta cuando no hay ningun estudiante que seleccionar en la base de datos
+        } else {//Este else se ejecuta cuando no hay ningun modulo que seleccionar en la base de datos
             System.out.println("No hay ningun Modulos en la base de datos. Pudes crear modulos nuevos y asignarle uno a la matricula o puedes abortar la creacion de la matricula");
             System.out.println("¿Deseas crear modulos nuevos? S/N");
             String response = scanString();
@@ -574,29 +580,56 @@ public class MainController {
         int selecction = scanInt();
         switch (selecction) {
             case 1:
+                if(returnGroupsItemCount()!=0){
                 selectsGroupController();
-                waitingKey();
-                mainMenuController();
+                }else{
+                    System.out.println("[!] En la base de datos no hay ningun grupo que pueda ser consultado");
+                    System.out.println("Volveras al menu principal");
+                    waitingKey();
+                    mainMenuController();
+                }
                 break;
             case 2:
+                if(returnStudentsItemCount()!=0){
                 selectsStudentController();
-                waitingKey();
-                mainMenuController();
+                }else{
+                    System.out.println("[!] En la base de datos no hay ningun Alumno que pueda ser consultado");
+                    System.out.println("Volveras al menu principal");
+                    waitingKey();
+                    mainMenuController();
+                }
                 break;
             case 3:
+                if(returnModulesItemCount()!=0){
                 selectsModuleController();
-                waitingKey();
-                mainMenuController();
+                }else{
+                    System.out.println("[!] En la base de datos no hay ningun Modulo que pueda ser consultado");
+                    System.out.println("Volveras al menu principal");
+                    waitingKey();
+                    mainMenuController();
+                }
                 break;
+               
             case 4:
+               if(returnEnrollmentsItemCount()!=0){
                 selectsEnrollmentController();
-                waitingKey();
-                mainMenuController();
+                }else{
+                    System.out.println("[!] En la base de datos no hay ninguna matricula que pueda ser consultada");
+                    System.out.println("Volveras al menu principal");
+                    waitingKey();
+                    mainMenuController();
+                }
                 break;
+               
             case 5:
+                if(returnProjectsItemCount()!=0){
                 selectsProjectController();
-                waitingKey();
-                mainMenuController();
+                }else{
+                    System.out.println("[!] En la base de datos no hay ningun projecto que pueda ser consultado");
+                    System.out.println("Volveras al menu principal");
+                    waitingKey();
+                    mainMenuController();
+                }
                 break;
             case 6:
                 waitingKey();
@@ -621,8 +654,13 @@ public class MainController {
         int selecction = scanInt();
         switch (selecction) {
             case 1:
-                //Momentaneo ya que hay que actualizar a la version pro completa
                 Menus.printGroupData(Selects.selectAllGroups());
+                System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como alumnos? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedGroupInformation(Selects.selectAllGroups());
+                    }
                 waitingKey();
                 mainMenuController();
                 break;
@@ -668,7 +706,7 @@ public class MainController {
                     System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
                     String response = scanString();
                     if(response.equals("+")){
-                        SelectExtendedGroupInformation(groupFound);
+                        selectExtendedGroupInformation(groupFound);
                     }
                 }else{
                     System.out.println("[!] No se ha encontrado el id en la base de datos");
@@ -685,7 +723,7 @@ public class MainController {
                     System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
                     String response = scanString();
                     if(response.equals("+")){
-                        SelectExtendedGroupInformation(groupsFoundClassroom);
+                        selectExtendedGroupInformation(groupsFoundClassroom);
                     }
                     
                 }else{
@@ -700,17 +738,17 @@ public class MainController {
                 if(!groupsFoundDescription.isEmpty()){
                     Menus.printGroupData(groupsFoundDescription);
                     System.out.println("///////////////////////////////////////////////////////////");
-                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas imprimir los alumnos que tiene asignados el grupo? [Introduce + para mostrar o pulsa enter para continuar]");
                     String response = scanString();
                     if(response.equals("+")){
-                        SelectExtendedGroupInformation(groupsFoundDescription);
+                        selectExtendedGroupInformation(groupsFoundDescription);
                     }
                 }else{
                     System.out.println("[!] No se ha encontrado ningun grupo con esa descripcion asignada");
                 }
     }
     
-    public static void SelectExtendedGroupInformation(List<Group> groups){
+    public static void selectExtendedGroupInformation(List<Group> groups){
         System.out.println("///////////////////////////////////////////");
         for (Group group: groups) {
            if(Selects.findStudentsByGroup(group)!=null){
@@ -731,7 +769,7 @@ public class MainController {
                 //Momentaneo ya que hay que actualizar a la version pro completa
                 Menus.printStudentData(Selects.selectAllStudents());
                 System.out.println("///////////////////////////////////////////////////////////");
-                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como proyectos y matriculas? [Introduce + para mostrar o pulsa enter para continuar]");
                     String response = scanString();
                     if(response.equals("+")){
                         selectExtendedStudentInformation(Selects.selectAllStudents());
@@ -782,7 +820,7 @@ public class MainController {
                 if(studentFound.get(0)!=null){
                     Menus.printStudentData(studentFound);
                     System.out.println("///////////////////////////////////////////////////////////");
-                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas o proyecto? [Introduce + para mostrar o pulsa enter para continuar]");
                     String response = scanString();
                     if(response.equals("+")){
                         selectExtendedStudentInformation(studentFound);
@@ -799,7 +837,7 @@ public class MainController {
                 if(studentsFound.isEmpty()){
                     Menus.printStudentData(studentsFound);
                     System.out.println("///////////////////////////////////////////////////////////");
-                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas o proyecto? [Introduce + para mostrar o pulsa enter para continuar]");
                     String response = scanString();
                     if(response.equals("+")){
                          selectExtendedStudentInformation(studentsFound);
@@ -815,7 +853,7 @@ public class MainController {
                 if(studentsFound.isEmpty()){
                     Menus.printStudentData(studentsFound);
                     System.out.println("///////////////////////////////////////////////////////////");
-                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas o proyecto? [Introduce + para mostrar o pulsa enter para continuar]");
                     String response = scanString();
                     if(response.equals("+")){
                          selectExtendedStudentInformation(studentsFound);
@@ -830,7 +868,7 @@ public class MainController {
                 if(!studentsFound.isEmpty()){
                     Menus.printStudentData(studentsFound);
                     System.out.println("///////////////////////////////////////////////////////////");
-                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas o proyecto? [Introduce + para mostrar o pulsa enter para continuar]");
                     String response = scanString();
                     if(response.equals("+")){
                          selectExtendedStudentInformation(studentsFound);
@@ -855,7 +893,7 @@ public class MainController {
                 System.out.println("Ha seleccionado un id que no esta en la base de datos");
                 System.out.println("Por favor seleccione una de las siguientes opciones: ");
                 System.out.println("1. Volver a elegir un grupo ya existente");
-                System.out.println("2. Salir de la busqueda de alumnos por grupo");
+                System.out.println("2. Volver al menu de consultas");
                 System.out.println("3. Volver al menu principal");
                 int optionSelected = scanInt();
                 switch (optionSelected) {
@@ -870,6 +908,7 @@ public class MainController {
                         waitingKey();
                         selectsController();
                     case 3:
+                        waitingKey();
                         mainMenuController();
                         break;
                     default:
@@ -886,6 +925,7 @@ public class MainController {
     public static void selectExtendedStudentInformation(List<Student> students){
         System.out.println("///////////////////////////////////////////");
         for (Student student: students) {
+             waitingKey();
            if(Selects.findEnrollmentsByStudent(student)!=null){
                System.out.println("Estos son las matriculas relacionados con el alumno " + student.getName()+ " con el NIA " +student.getNia());
                Menus.printEnrollmentData(Selects.findEnrollmentsByStudent(student));
@@ -899,7 +939,6 @@ public class MainController {
             }else{
                 System.out.println("El Alumno " + student.getName()+ " con el NIA " + student.getNia() + " no tiene ningun proyecto asignado");
             }
-            waitingKey();
         }
     }
     public static void selectsModuleController() {
@@ -909,30 +948,35 @@ public class MainController {
             case 1:
                 //Momentaneo ya que hay que actualizar a la version pro completa
                 Menus.printModuleData(Selects.selectAllModules());
+                System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como matriculas? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedModuleInformation(Selects.selectAllModules());
+                    }
                 waitingKey();
                 mainMenuController();
                 break;
             case 2:
-                //Print by id
+                selectsModuleController(); 
+                waitingKey();
                 mainMenuController();
                 break;
             case 3:
-                //Print by nombre
+                selectModuleByDescriptionController();
+                waitingKey();
                 mainMenuController();
                 break;
             case 4:
-                //Print by descripcion
+                selectModuleByNumHoursController();
+                waitingKey();
                 mainMenuController();
                 break;
             case 5:
-                //Print by numhoras
-                mainMenuController();
-                break;
-            case 6:
                 waitingKey();
                 selectsController();
                 break;
-            case 7:
+            case 6:
                 waitingKey();
                 mainMenuController();
             default:
@@ -942,31 +986,106 @@ public class MainController {
                 break;
         }
     }
-
+    
+    public static void selectModuleByIdController(){
+        System.out.println("Introduce el ID a buscar");
+                int id = scanInt();
+                List<entity.Module> moduleFound = new ArrayList<entity.Module>();
+                moduleFound.add(Selects.findModuleById(id));
+                System.out.println(moduleFound.size());
+                if(moduleFound.get(0)!=null){
+                    Menus.printModuleData(moduleFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir las matriculas que tiene el modulo? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedModuleInformation(moduleFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado el id en la base de datos");
+                }
+    }
+    
+    public static void selectModuleByDescriptionController(){
+        System.out.println("Introduce la descripcion del modulo que deseas buscar [!]Aviso: Tiene que ser exacta ");
+                String description = scanString();
+                List<entity.Module> modulesFound = Selects.findModulesByDescription(description);
+                if(modulesFound.isEmpty()){
+                    Menus.printModuleData(modulesFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                         selectExtendedModuleInformation(modulesFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ningun modulo con esa descripcion asignada");
+                }
+    }
+    
+    public static void selectModuleByNumHoursController(){
+        System.out.println("Introduce la cantidad de horas del modulo que deseas buscar [!]Aviso: Tiene que ser exacta ");
+                int numHours = scanInt();
+                List<entity.Module> modulesFound = Selects.findModulesByNumHours(numHours);
+                if(modulesFound.isEmpty()){
+                    Menus.printModuleData(modulesFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir las matriculas que tienen los modulos asignadas? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                         selectExtendedModuleInformation(modulesFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ningun modulo con esa cantidad de horas asignada asignada");
+                }
+    }
+    
+    public static void selectExtendedModuleInformation(List<entity.Module> modules){
+         System.out.println("//////////////////////////////////////");
+         for (entity.Module module: modules) {
+             waitingKey();
+           if(Selects.findEnrollmentsByModule(module)!=null){
+               System.out.println("Estos son las matriculas relacionados con el modulo con ID " + module.getModuleId());
+               Menus.printEnrollmentData(Selects.findEnrollmentsByModule(module));
+           }else{
+               System.out.println("El modulo con ID " + module.getModuleId() + " no tiene ninguna matricula asignada" );
+           }
+            System.out.println("///////////////////////////////////////////");
+        }
+    }
+    
     public static void selectsEnrollmentController() {
         Menus.selectsMenuEnrollment();
         int selecction = scanInt();
         switch (selecction) {
             case 1:
-                //Momentaneo ya que hay que actualizar a la version pro completa
                 Menus.printEnrollmentData(Selects.selectAllEnrollments());
+                System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como alumnos y modulos? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedEnrollmentInformation(Selects.selectAllEnrollments());
+                    }
                 waitingKey();
                 mainMenuController();
                 break;
             case 2:
-                //Print by id
+                selectEnrollmentbyIdController();
                 mainMenuController();
                 break;
             case 3:
-                //Print by description
+                selectEnrollmentByDescription();
+                waitingKey();
                 mainMenuController();
                 break;
             case 4:
-                //Print by Student
+                selectEnrollmentByStudent();
+                waitingKey();
                 mainMenuController();
                 break;
             case 5:
-                //Print by module
+                selectEnrollmentByModule();
+                waitingKey();
                 mainMenuController();
                 break;
             case 6:
@@ -983,38 +1102,237 @@ public class MainController {
                 break;
         }
     }
+    
+    public static void selectEnrollmentbyIdController(){
+         System.out.println("Introduce el ID a buscar");
+                int id = scanInt();
+                List<Enrollment> enrollmentFound = new ArrayList<Enrollment>();
+                enrollmentFound.add(Selects.findEnrollmentById(id));
+                System.out.println(enrollmentFound.size());
+                if(enrollmentFound.get(0)!=null){
+                    Menus.printEnrollmentData(enrollmentFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas los alumnos y modulos relacionados? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedEnrollmentInformation(enrollmentFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado el id en la base de datos");
+                }
+    }
+    
+    public static void selectEnrollmentByDescription(){
+        System.out.println("Introduce la descripcion de la matricula que deseas buscar [!]Aviso: Tiene que ser exacta ");
+                String description = scanString();
+                List<Enrollment> enrollmentFound = Selects.findEnrollmentsByDescription(description);
+                if(enrollmentFound.isEmpty()){
+                    Menus.printEnrollmentData(enrollmentFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas los alumnos y modulos relacionados? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedEnrollmentInformation(enrollmentFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ninguna matricula con esa descripcion asignada");
+                }
+    }
+    
+    public static void selectEnrollmentByStudent(){
+        Student studentSelected = selectsStudentSelector();
+                List<Enrollment> enrollmentFound = Selects.findEnrollmentsByStudent(studentSelected);
+                if(enrollmentFound.isEmpty()){
+                    Menus.printEnrollmentData(enrollmentFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas los alumnos y modulos relacionados? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedEnrollmentInformation(enrollmentFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ninguna matricula con esa descripcion asignada");
+                }
+    }
+    
+    public static Student selectsStudentSelector(){
+         Student student = new Student();
+        System.out.println("Selecciona un estudiante para buscarlo en la base de datos");
+        if (Selects.selectAllStudents() != null) {
+            System.out.println("Hemos encontrado los siguientes alumnos en la base de datos");
+            Menus.printStudentData(Selects.selectAllStudents());
+            System.out.println("Escribe el NIA del alumno que quieras seleccionar");
+            String nia = scanString();
+            if (Selects.findStudentByNia(nia) != null) {
+                //El select se hace dos veces pero eso me parecia mejor que crear una variable mas para esta clase que solo se iba a utilizar una vez. Si necesitaramos optimizar las entradas a la base de datos podriamos cambiarlo. 
+                student = Selects.findStudentByNia(nia);
+                return student;
+            } else {//Si no encuentra el alumno en la base de datos significa que el nia seleccionado no existe. Si fuera necesario optimizarlo mas podriamos ahorrarnos esta consulta simplemente guardandonos la lista de estudiantes en la request original, sin embargo considere que asi era mejor porque podia aislar la representacion de los estudiantes en la clase de menus
+                System.out.println("////////////////////////////////////////////");
+                System.out.println("[!]El nia que has seleccionado no existe en la base de datos. ");
+                System.out.println("");
+                System.out.println("Puedes elegir entre las siguientes opciones: ");
+                System.out.println("1. Volver a elegir un alumno de la lista");
+                System.out.println("2. Volver al menu de mostrar datos");
+                System.out.println("3. Volver al menu principal");
+                int response = scanInt();
+                switch (response) {
+                    //Volver a elegir otro alumno de la lista
+                    case 1:
+                        waitingKey();
+                        student = insertEnrollmentStudentSelecction();
+                        return student;
+                    //Redirige al menu de mostrar datos
+                    case 2:
+                        waitingKey();
+                        selectsController();
+                        break;
+                    //Vuelve al menu principal 
+                    case 3:
+                        waitingKey();
+                        mainMenuController();
+                        break;
+                    //Igual que la opcion 3 pero con una pequeña explicacion
+                    default:
+                        System.out.println("La opcion que has seleccionado no es valida, por tanto, vuelve al menu principal");
+                        waitingKey();
+                        mainMenuController();
+                }
 
+            }
+        } else {//Este else se ejecuta cuando no hay ningun estudiante que seleccionar en la base de datos
+            System.out.println("No hay ningun estudiante en la base de datos. Esto debe tratarse de un error, ya que no deberia haber matriculas si no hay alumnos");
+           
+        }
+        //Este return es solo para que permita compilar. Si no hay ningun error no deberia ejecutarse nunca.
+        return student;
+    }
+    
+   
+    public static void selectEnrollmentByModule(){
+        entity.Module moduleSelected = selectEnrollmentModuleSelector();
+                List<Enrollment> enrollmentFound = Selects.findEnrollmentsByModule(moduleSelected);
+                if(enrollmentFound.isEmpty()){
+                    Menus.printEnrollmentData(enrollmentFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas los alumnos y modulos relacionados? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedEnrollmentInformation(enrollmentFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ninguna matricula con esa descripcion asignada");
+                }
+    }
+    
+    public static entity.Module selectEnrollmentModuleSelector(){
+        entity.Module module = new entity.Module();
+        System.out.println("Ahora podras seleccionar el modulo que desees buscar en la base de datos");
+        if (Selects.selectAllModules() != null) {//comprubea si hay algun modulo en la base de datos
+            System.out.println("Hemos encontrado los siguientes modulos en la base de datos");
+            Menus.printModuleData(Selects.selectAllModules());
+            System.out.println("Escribe el id del modulo que quieras seleccionar");
+            int idModule = scanInt();
+            if (Selects.findModuleById(idModule) != null) {//Comprueba si el id seleccionado existe en la base de datos
+                module = Selects.findModuleById(idModule);
+                return module; 
+            } else {//Si no existe da las siguientes opciones
+                System.out.println("////////////////////////////////////////");
+                System.out.println("[!]El id de modulo  que has seleccionado no existe en la base de datos. ");
+                System.out.println("");
+                System.out.println("Puedes elegir entre las siguientes opciones: ");
+                System.out.println("1. Volver a elegir un modulo de la lista");
+                System.out.println("2. Volver al selector de visualizacion de datos");
+                System.out.println("3. Volver al menu principal");
+                int response = scanInt();
+                switch (response) {
+                    //Volver a elegir otro alumno de la lista
+                    case 1:
+                        module = insertEnrollmentModuleSelecction();
+                        return module;
+                    //Redirige a al menu de Selects
+                    case 2:
+                        System.out.println("Volveras al menu de visualizacion de datos");
+                        waitingKey();
+                        selectsController();
+                    //Vuelve al menu principal por lo que aborta la creacion de Matricula
+                    case 3:
+                        waitingKey();
+                        mainMenuController();
+                        break;
+                    //Igual que la opcion 3 pero con una pequeña explicacion
+                    default:
+                        System.out.println("La opcion que has seleccionado no es valida, por tanto, volveras al menu principal");
+                        mainMenuController();
+                }
+
+            }
+        } else {//Este else se ejecuta cuando no hay ningun modulo que seleccionar en la base de datos
+            System.out.println("No hay ningun Modulo en la base de datos. Esto debe tratarse de un error puesto que so hay matriculas debe haber modulos tambien. ");
+        }
+        //Este return es solo para que permita compilar. Si no hay ningun error no deberia ejecutarse nunca.
+        return module;
+
+    }
+
+    public static void selectExtendedEnrollmentInformation(List<Enrollment> enrollments){
+         System.out.println("//////////////////////////////////////");
+         for (Enrollment enrollment: enrollments) {
+               waitingKey();
+               System.out.println("Este es el alumno relacionado con la matricula con ID " + enrollment.getIdEnrollment());
+              //Una conversion rapida ya que printStudentData requiere que le des la informacion en forma de lista aunque esta solo tenga un elemento
+               List <Student> studentAsList = new ArrayList <Student>(); 
+               studentAsList.add(enrollment.getStudent()); 
+               Menus.printStudentData(studentAsList);
+            System.out.println("///////////////////////////////////////////");
+             System.out.println("Este es el modulo al que esta matriculado el alumno relacionado con la matricula con ID " + enrollment.getIdEnrollment());
+             //Una conversion rapida ya que printStudentData requiere que le des la informacion en forma de lista aunque esta solo tenga un elemento
+               List <entity.Module> moduleAsList = new ArrayList <entity.Module>(); 
+               moduleAsList.add(enrollment.getModule()); 
+               Menus.printModuleData(moduleAsList);
+           
+        }
+    }
+    
+    
     public static void selectsProjectController() {
         Menus.selectsMenuProject();
         int selecction = scanInt();
         switch (selecction) {
             case 1:
-                //Momentaneo ya que hay que actualizar a la version pro completa
                 Menus.printProjectData(Selects.selectAllProjects());
+                System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir la informacion del alumno al que está asignado? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedProjectInformation(Selects.selectAllProjects());
+                    }
                 waitingKey();
                 mainMenuController();
                 break;
             case 2:
-                //Print by id
+                selectProjectById();
+                waitingKey();
                 mainMenuController();
                 break;
             case 3:
-                //Print by nombre
+                selectProjectByTitle();
+                waitingKey();
                 mainMenuController();
                 break;
             case 4:
-                //Print by descripcion
+               selectProjectByStudent();
+               waitingKey();
                 mainMenuController();
                 break;
             case 5:
-                //Print by student
-                mainMenuController();
-                break;
-            case 6:
                 waitingKey();
                 selectsController();
                 break;
-            case 7:
+            case 6:
                 waitingKey();
                 mainMenuController();
             default:
@@ -1022,6 +1340,74 @@ public class MainController {
                 waitingKey();
                 mainMenuController();
                 break;
+        }
+    }
+    
+    public static void selectProjectById(){
+         System.out.println("Introduce el ID a buscar");
+                String id = scanString();
+                List<Project> projectFound = new ArrayList<Project>();
+                projectFound.add(Selects.findProjectById(id));
+                System.out.println(projectFound.size());
+                if(projectFound.get(0)!=null){
+                    Menus.printProjectData(projectFound);
+                    System.out.println("");
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir la informacion del alumno al que está asignado? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedProjectInformation(projectFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado el id en la base de datos");
+                }
+    }
+    
+    public static void selectProjectByTitle(){
+        System.out.println("Introduce el titulo del proyecto que deseas buscar");
+                String title = scanString();
+                List<Project> projectFound = Selects.findProjectsByTitle(title);
+                if(projectFound.isEmpty()){
+                    Menus.printProjectData(projectFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas imprimir la informacion del alumno al que está asignado? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedProjectInformation(projectFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ninguna matricula con esa descripcion asignada");
+                }
+    }
+    
+    public static void selectProjectByStudent(){
+        Student studentSelected = selectsStudentSelector(); 
+        List<Project> projectFound = Selects.findProjectsByStudent(studentSelected);
+                if(projectFound.isEmpty()){
+                    Menus.printProjectData(projectFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante como sus matriculas? [Introduce + para mostrar o pulsa enter para continuar]");
+                    System.out.println("¿Deseas los alumnos y modulos relacionados? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedProjectInformation(projectFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ninguna matricula con esa descripcion asignada");
+                }
+    }
+    
+    
+    public static void selectExtendedProjectInformation(List<Project> projects){
+        System.out.println("//////////////////////////////////////");
+         for (Project project: projects) {
+               waitingKey();
+               System.out.println("Este es el alumno asignado al proyecto con ID " + project.getProjectId());
+               //Una conversion rapida ya que printStudentData requiere que le des la informacion en forma de lista aunque esta solo tenga un elemento
+               List <Student> studentAsList = new ArrayList <Student>(); 
+               studentAsList.add(project.getStudent()); 
+               Menus.printStudentData(studentAsList);
         }
     }
 
@@ -1065,7 +1451,225 @@ public class MainController {
             return false;
         }
     }
+   //////////////////////////////////////////////////////////// DELETES //////////////////////////////////////////////
+    
+    public static void deletesController(){
+       Menus.deletesMenu();
+        int selecction = scanInt();
+        switch (selecction) {
+            case 1:
+                deleteGroupController();
+                waitingKey();
+                mainMenuController();
+                break;
+            case 2:
+                deleteStudentController();
+                waitingKey();
+                mainMenuController();
+                break;
+            case 3:
+                deleteModuleController();
+                mainMenuController();
+                break;
+            case 4:
+               deleteEnrollmentController();
+               waitingKey();
+                mainMenuController();
+                break;
+            case 5:
+                deleteProjectController();
+                waitingKey();
+                mainMenuController();
+                break;
+            case 6:
+                waitingKey();
+                mainMenuController();
+            default:
+                System.out.println("La opcion que has seleccionado no existe, volveras al menu principal");
+                waitingKey();
+                mainMenuController();
+                break;
+        }
+    }
+    
+    public static void deleteGroupController(){
+        System.out.println("Selecciona el grupo que deseas borrar");
+        Group group = deleteGroupSelector();
+        if(Selects.findStudentsByGroup(group)== null){//Si la lista vuelve vacia significa que no hay ningun estudiante y por tanto la entrada puede ser borrada
+            Deletes.deleteGroup(group);
+        }else{
+            System.out.println("[!]No se puede eliminar el grupo ya que hay alumnos que lo tienen asignado");
+            System.out.println("Volveras al menu de borrar, borra primero los alumnos si deseas borrar este grupo");
+            waitingKey();
+            deletesController();
+        }
+    }
+    
+    public static Group deleteGroupSelector(){
+         System.out.println("Se imprimiran los Grupos de la base de datos para que puedas elegir cual quieres borrar");
+         Group group = new Group();
+        if (returnGroupsItemCount() != 0) {
+            System.out.println("Elige uno de los siguientes Grupos ya creados o crea uno nuevo metiendo un indice que aun no exista diferente de cero: ");
+            Menus.printGroupData(Selects.selectAllGroups());
+            System.out.println("Introduce el numero de identificacion que quiera utilizar: ");
+            int selecction = scanInt();
+            if (Selects.findGroupById(selecction) != null) {//Si es nulo lo puede crear porque significaque el ID que intentas introducir no lo esta gastando ningun grupo en la base de datos
+                //La consulta se vuelve a hacer, un poco redundante quizas pero no queria tener una variable mas en este metodo.
+                Group groupSelected = Selects.findGroupById(selecction);
+                return groupSelected;
+            } else {//Si no es nulo significa que ya hay un objeto con ese ID en la base de datos y por tanto no puede utilizarlo
+                System.out.println("Ha seleccionado un id que no esta en la base de datos");
+                System.out.println("Por favor seleccione una de las siguientes opciones: ");
+                System.out.println("1. Volver a elegir un grupo ya existente");
+                System.out.println("2. Volver al menu principal");
+                int optionSelected = scanInt();
+                switch (optionSelected) {
+                    //Volver a elegir un Grupo
+                    case 1:
+                        waitingKey();
+                        group = insertStudentGroupSelecction();
+                        return group;
+                    //Volver al menu de consulta
+                    case 2:
+                        waitingKey();
+                        mainMenuController();
+                        break;
+                    default:
+                        System.out.println("La opcion que has seleccionado no es valida, por tanto, se aborta la consulta de alumno");
+                        mainMenuController();
+                }
+            }
 
+        } else {
+            System.out.println("[!]No hay ningun grupo en la base de datos. Esto debe ser un error ya que no deberia dejarte borrar el grupo si no hay ninguno en la base de datos");
+        }
+        return group;
+        
+    }
+    
+    public static void deleteStudentController(){
+        System.out.println("Selecciona el Alumno que quieras borrar");
+        Student student = deleteStudentSelector();
+        if(Selects.findProjectsByStudent(student)==null){
+            Deletes.deleteStudent(student);   
+            System.out.println("Borrado realizado con exito");
+        }else{
+            if(student.getGroup().equals("FCT")){
+                System.out.println("El estudiante tiene un proyecto asignado aunque es del grupo FCT. Tanto el proyecto como el alumno seran borrados de la base de datos");
+                Deletes.deleteProject(Selects.findProjectsByStudent(student).get(0));
+                Deletes.deleteStudent(student);
+                System.out.println("Borrado realizado con exito");
+                waitingKey();
+            }else{
+                System.out.println("[!] No puedes eliminar el alumno ya que tiene un proyecto asignado");
+                System.out.println("Elimina antes el proyecto si deseas eliminar el alumno");
+                System.out.println("Volveras al menu de borrado");
+                waitingKey();
+                deletesController();
+            }
+        }
+    }
+    
+    public static Student deleteStudentSelector(){
+        Student student = new Student();
+        System.out.println("Selecciona un estudiante para borrarlo de la base de datos");
+        if (Selects.selectAllStudents() != null) {
+            System.out.println("Hemos encontrado los siguientes alumnos en la base de datos");
+            Menus.printStudentData(Selects.selectAllStudents());
+            System.out.println("Escribe el NIA del alumno que quieras seleccionar");
+            String nia = scanString();
+            if (Selects.findStudentByNia(nia) != null) {
+                //El select se hace dos veces pero eso me parecia mejor que crear una variable mas para esta clase que solo se iba a utilizar una vez. Si necesitaramos optimizar las entradas a la base de datos podriamos cambiarlo. 
+                student = Selects.findStudentByNia(nia);
+                return student;
+            } else {//Si no encuentra el alumno en la base de datos significa que el nia seleccionado no existe. Si fuera necesario optimizarlo mas podriamos ahorrarnos esta consulta simplemente guardandonos la lista de estudiantes en la request original, sin embargo considere que asi era mejor porque podia aislar la representacion de los estudiantes en la clase de menus
+                System.out.println("////////////////////////////////////////////");
+                System.out.println("[!]El nia que has seleccionado no existe en la base de datos. ");
+                System.out.println("");
+                System.out.println("Puedes elegir entre las siguientes opciones: ");
+                System.out.println("1. Volver a elegir un alumno de la lista");
+                System.out.println("2. Volver al menu principal");
+                int response = scanInt();
+                switch (response) {
+                    //Volver a elegir otro alumno de la lista
+                    case 1:
+                        waitingKey();
+                        student = insertEnrollmentStudentSelecction();
+                        return student;
+                  
+                    //Vuelve al menu principal 
+                    case 2:
+                        waitingKey();
+                        mainMenuController();
+                        break;
+                    //Igual que la opcion 3 pero con una pequeña explicacion
+                    default:
+                        System.out.println("La opcion que has seleccionado no es valida, por tanto, vuelve al menu principal");
+                        waitingKey();
+                        mainMenuController();
+                }
+
+            }
+        } else {//Este else se ejecuta cuando no hay ningun estudiante que seleccionar en la base de datos
+            System.out.println("No hay ningun estudiante en la base de datos. Esto debe tratarse de un error, ya que no deberia haber matriculas si no hay alumnos");
+           
+        }
+        //Este return es solo para que permita compilar. Si no hay ningun error no deberia ejecutarse nunca.
+        return student;
+    }
+    
+    public static void deleteModuleController(){
+        System.out.println("Elige el modulo que deseas borrar");
+        entity.Module module = deleteModuleSelector();
+        if(Selects.findEnrollmentsByModule(module)!= null){
+            System.out.println("Hay alumnos matriculados en el modulo que intentas borrar, por lo que seran eliminados ");
+        }
+    }
+    
+    public static entity.Module deleteModuleSelector(){
+        entity.Module module = new entity.Module();
+        System.out.println("Ahora podras seleccionar el modulo que desees borrar de la base de datos");
+        if (Selects.selectAllModules() != null) {//comprubea si hay algun modulo en la base de datos
+            System.out.println("Hemos encontrado los siguientes modulos en la base de datos");
+            Menus.printModuleData(Selects.selectAllModules());
+            System.out.println("Escribe el id del modulo que quieras seleccionar");
+            int idModule = scanInt();
+            if (Selects.findModuleById(idModule) != null) {//Comprueba si el id seleccionado existe en la base de datos
+                module = Selects.findModuleById(idModule);
+                return module; 
+            } else {//Si no existe da las siguientes opciones
+                System.out.println("////////////////////////////////////////");
+                System.out.println("[!]El id de modulo  que has seleccionado no existe en la base de datos. ");
+                System.out.println("");
+                System.out.println("Puedes elegir entre las siguientes opciones: ");
+                System.out.println("1. Volver a elegir un modulo de la lista");
+                System.out.println("2. Volver al menu principal");
+                int response = scanInt();
+                switch (response) {
+                    //Volver a elegir otro alumno de la lista
+                    case 1:
+                        module = insertEnrollmentModuleSelecction();
+                        return module;
+                    //Redirige a al menu de Selects
+                   
+                    //Vuelve al menu principal por lo que aborta la creacion de Matricula
+                    case 2:
+                        waitingKey();
+                        mainMenuController();
+                        break;
+                    //Igual que la opcion 3 pero con una pequeña explicacion
+                    default:
+                        System.out.println("La opcion que has seleccionado no es valida, por tanto, volveras al menu principal");
+                        mainMenuController();
+                }
+
+            }
+        } else {//Este else se ejecuta cuando no hay ningun modulo que seleccionar en la base de datos
+            System.out.println("No hay ningun Modulo en la base de datos. Esto debe tratarse de un error puesto que so hay matriculas debe haber modulos tambien. ");
+        }
+        //Este return es solo para que permita compilar. Si no hay ningun error no deberia ejecutarse nunca.
+        return module;
+    }
     // Vaciar la base de datos
     public static void deleteAllDatabaseSelected() {
         
