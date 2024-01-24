@@ -128,7 +128,7 @@ public class Menus {
         System.out.println("Introduce el tipo de consulta que deseas hacer");
         System.out.println("1. Imprimir todos los grupos de la base de datos");
         System.out.println("2. Buscar un grupo por id");
-        System.out.println("3. Buscar grupos por nombre");
+        System.out.println("3. Buscar grupos por clase");
         System.out.println("4. Buscar grupos por descripcion");
         System.out.println("5. Volver a la seleccion de consultas");
         System.out.println("6. Volver al menu principal");

@@ -4,6 +4,7 @@
 package controller;
 
 import entity.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import view.Menus;
@@ -625,19 +626,22 @@ public class MainController {
                 waitingKey();
                 mainMenuController();
                 break;
-            case 2:
-                //Print by id
-                mainMenuController();
-                break;
-            case 3:
-                //Print by nombre
-                mainMenuController();
-                break;
-            case 4:
-                //Print by descripcion
+            case 2://Busqueda por ID
+                selectGroupByIdController();
+                waitingKey();
                 mainMenuController();
                 break;
 
+            case 3:
+                selectGroupByClassroomController();
+                waitingKey();
+                mainMenuController();
+                break;
+            case 4:
+                selectGroupByDescriptionController();
+                waitingKey();
+                mainMenuController();
+                break;
             case 5:
                 waitingKey();
                 selectsController();
@@ -652,7 +656,73 @@ public class MainController {
                 break;
         }
     }
-
+    public static void selectGroupByIdController(){
+        System.out.println("Introduce el ID a buscar");
+                int id = scanInt();
+                List<Group> groupFound = new ArrayList<Group>();
+                groupFound.add(Selects.findGroupById(id));
+                System.out.println(groupFound.size());
+                if(groupFound.get(0)!=null){
+                    Menus.printGroupData(groupFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        SelectExtendedGroupInformation(groupFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado el id en la base de datos");
+                }
+    }
+    
+    public static void selectGroupByClassroomController(){
+         System.out.println("Introduce la clase del grupo que deseas buscar: ");
+                String classroom = scanString();
+                List<Group> groupsFoundClassroom = Selects.findGroupsByClassroom(classroom);
+                if(!groupsFoundClassroom.isEmpty()){
+                    Menus.printGroupData(groupsFoundClassroom);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        SelectExtendedGroupInformation(groupsFoundClassroom);
+                    }
+                    
+                }else{
+                    System.out.println("[!] No se ha encontrado ningun grupo con esa clase asignada");
+                }
+    }
+    
+    public static void selectGroupByDescriptionController(){
+        System.out.println("Introduce la clase del grupo que deseas buscar: ");
+                String description = scanString();
+                List<Group> groupsFoundDescription = Selects.findGroupsByDescription(description);
+                if(!groupsFoundDescription.isEmpty()){
+                    Menus.printGroupData(groupsFoundDescription);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        SelectExtendedGroupInformation(groupsFoundDescription);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ningun grupo con esa descripcion asignada");
+                }
+    }
+    
+    public static void SelectExtendedGroupInformation(List<Group> groups){
+        System.out.println("///////////////////////////////////////////");
+        for (Group group: groups) {
+           if(Selects.findStudentsByGroup(group)!=null){
+               System.out.println("Estos son los alumnos relacionados con el grupo " + group.getClassroom() + " con el ID " +group.getGroupId());
+               Menus.printStudentData(Selects.findStudentsByGroup(group));
+           }else{
+               System.out.println("El grupo " + group.getClassroom() + " con el ID " + group.getGroupId() + " no tiene ningun alumo asignado");
+           }
+           waitingKey();
+        }
+    }
+    
     public static void selectsStudentController() {
         Menus.selectsMenuStudent();
         int selecction = scanInt();
@@ -660,23 +730,33 @@ public class MainController {
             case 1:
                 //Momentaneo ya que hay que actualizar a la version pro completa
                 Menus.printStudentData(Selects.selectAllStudents());
+                System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedStudentInformation(Selects.selectAllStudents());
+                    }
                 waitingKey();
                 mainMenuController();
                 break;
             case 2:
-                //Print by id
+                selectStudentByNiaController();
+                waitingKey();
                 mainMenuController();
                 break;
             case 3:
-                //Print by nombre
+                selectStudentByNameController();
+                waitingKey();
                 mainMenuController();
                 break;
             case 4:
-                //Print by Apellidos
+                selectStudentByLastnameController();
+                waitingKey();
                 mainMenuController();
                 break;
             case 5:
-                //Print by grupo
+                selectStudentByGroupController();
+                waitingKey();
                 mainMenuController();
                 break;
             case 6:
@@ -693,7 +773,135 @@ public class MainController {
                 break;
         }
     }
+    
+    public static void selectStudentByNiaController(){
+        System.out.println("Introduce el NIA a buscar");
+                String nia = scanString();
+                List<Student> studentFound = new ArrayList<Student>();
+                studentFound.add(Selects.findStudentByNia(nia));
+                if(studentFound.get(0)!=null){
+                    Menus.printStudentData(studentFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                        selectExtendedStudentInformation(studentFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado el NIA en la base de datos");
+                }
+    }
+    
+    public static void selectStudentByNameController(){
+        System.out.println("Introduce el nombre del alumno que deseas buscar: ");
+                String name = scanString();
+                List<Student> studentsFound = Selects.findStudentsByName(name);
+                if(studentsFound.isEmpty()){
+                    Menus.printStudentData(studentsFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                         selectExtendedStudentInformation(studentsFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ningun alumno con ese nombre asignado");
+                }
+    }
+    public static void selectStudentByLastnameController(){
+        System.out.println("Introduce el apellido del alumno que deseas buscar: ");
+                String lastname = scanString();
+                List<Student> studentsFound = Selects.findStudentsByLastname(lastname);
+                if(studentsFound.isEmpty()){
+                    Menus.printStudentData(studentsFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                         selectExtendedStudentInformation(studentsFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ningun Alumno con ese apellido asignado");
+                }
+    }
+    public static void selectStudentByGroupController(){
+                Group groupSelected = selectStudentGroupSelector();
+                List<Student> studentsFound = Selects.findStudentsByGroup(groupSelected);
+                if(!studentsFound.isEmpty()){
+                    Menus.printStudentData(studentsFound);
+                    System.out.println("///////////////////////////////////////////////////////////");
+                    System.out.println("¿Deseas imprimir otra informacion relevante? [Introduce + para mostrar o pulsa enter para continuar]");
+                    String response = scanString();
+                    if(response.equals("+")){
+                         selectExtendedStudentInformation(studentsFound);
+                    }
+                }else{
+                    System.out.println("[!] No se ha encontrado ningun Alumno con ese grupo asignado");
+                }
+    }
+   public static Group selectStudentGroupSelector(){
+        System.out.println("Se imprimiran los Grupos de la base de datos para que puedas buscar los estudiantes que tiene asignado");
+         Group group = new Group();
+        if (returnGroupsItemCount() != 0) {
+            System.out.println("Elige uno de los siguientes Grupos ya creados o crea uno nuevo metiendo un indice que aun no exista diferente de cero: ");
+            Menus.printGroupData(Selects.selectAllGroups());
+            System.out.println("Introduce el numero de identificacion que quiera utilizar: ");
+            int selecction = scanInt();
+            if (Selects.findGroupById(selecction) != null) {//Si es nulo lo puede crear porque significaque el ID que intentas introducir no lo esta gastando ningun grupo en la base de datos
+                //La consulta se vuelve a hacer, un poco redundante quizas pero no queria tener una variable mas en este metodo.
+                Group groupSelected = Selects.findGroupById(selecction);
+                return groupSelected;
+            } else {//Si no es nulo significa que ya hay un objeto con ese ID en la base de datos y por tanto no puede utilizarlo
+                System.out.println("Ha seleccionado un id que no esta en la base de datos");
+                System.out.println("Por favor seleccione una de las siguientes opciones: ");
+                System.out.println("1. Volver a elegir un grupo ya existente");
+                System.out.println("2. Salir de la busqueda de alumnos por grupo");
+                System.out.println("3. Volver al menu principal");
+                int optionSelected = scanInt();
+                switch (optionSelected) {
+                    //Volver a elegir un Grupo
+                    case 1:
+                        waitingKey();
+                        group = insertStudentGroupSelecction();
+                        return group;
+                    //Volver al menu de consulta
+                    case 2:
+                        System.out.println("Volveras a el menu de consulta ");
+                        waitingKey();
+                        selectsController();
+                    case 3:
+                        mainMenuController();
+                        break;
+                    default:
+                        System.out.println("La opcion que has seleccionado no es valida, por tanto, se aborta la consulta de alumno");
+                        mainMenuController();
+                }
+            }
 
+        } else {
+            System.out.println("[!]No hay ningun grupo en la base de datos. Esto debe ser un error ya que no deberia haber ningun estudiante sin grupo");
+        }
+        return group;
+    }
+    public static void selectExtendedStudentInformation(List<Student> students){
+        System.out.println("///////////////////////////////////////////");
+        for (Student student: students) {
+           if(Selects.findEnrollmentsByStudent(student)!=null){
+               System.out.println("Estos son las matriculas relacionados con el alumno " + student.getName()+ " con el NIA " +student.getNia());
+               Menus.printEnrollmentData(Selects.findEnrollmentsByStudent(student));
+           }else{
+               System.out.println("El Alumno " + student.getName()+ " con el NIA " + student.getNia() + " no tiene ninguna Matricula asignada");
+           }
+            System.out.println("///////////////////////////////////////////");
+            if(Selects.findProjectsByStudent(student)!=null){
+                System.out.println("Este es el proyecto que tiene asignado el alumno " + student.getName() + " con el nia " + student.getNia());
+                Menus.printProjectData(Selects.findProjectsByStudent(student));
+            }else{
+                System.out.println("El Alumno " + student.getName()+ " con el NIA " + student.getNia() + " no tiene ningun proyecto asignado");
+            }
+            waitingKey();
+        }
+    }
     public static void selectsModuleController() {
         Menus.selectsMenuModule();
         int selecction = scanInt();

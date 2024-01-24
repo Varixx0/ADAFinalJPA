@@ -1,5 +1,5 @@
 /*
-     * Clase Entity correspondiente a la tabla GRUPO en la base de datos
+     * Clase Entity correspondiente a la tabla GRUPO en la base de datos 
  */
 package entity;
 

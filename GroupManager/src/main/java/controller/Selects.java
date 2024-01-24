@@ -16,6 +16,7 @@ import javax.persistence.TypedQuery;
  * @author victortercero
  */
 public class Selects {
+    
 
     /////////////////////////////////////SELECT ALL/////////////////////////////////////
     /*
@@ -151,6 +152,8 @@ public class Selects {
             TypedQuery<Student> query = em.createNamedQuery("Student.findByNia", Student.class);
             query.setParameter("nia", nia);
             return query.getSingleResult();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -165,6 +168,8 @@ public class Selects {
             TypedQuery<Student> query = em.createNamedQuery("Student.findByNia", Student.class);
             query.setParameter("name", name);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -172,13 +177,15 @@ public class Selects {
     }
 
     // Método para obtener estudiantes por apellidos
-    public List<Student> findStudentsByLastName(String lastName) {
+    public static List<Student> findStudentsByLastname(String lastName) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
             TypedQuery<Student> query = em.createNamedQuery("Student.findByNia", Student.class);
             query.setParameter("lastname", lastName);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -190,9 +197,11 @@ public class Selects {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Student> query = em.createNamedQuery("Student.findByNia", Student.class);
+            TypedQuery<Student> query = em.createNamedQuery("Student.findByGroup", Student.class);
             query.setParameter("group", group);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -208,7 +217,10 @@ public class Selects {
             TypedQuery<Group> query = em.createNamedQuery("Group.findById", Group.class);
             query.setParameter("groupId", groupId);
             return query.getSingleResult();
-        } finally {
+        }catch(Exception e){
+            return null;
+        }
+        finally {
             em.close();
             emf.close();
         }
@@ -219,9 +231,11 @@ public class Selects {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Group> query = em.createNamedQuery("Group.findById", Group.class);
+            TypedQuery<Group> query = em.createNamedQuery("Group.findByDescription", Group.class);
             query.setParameter("description", description);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -233,9 +247,11 @@ public class Selects {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Group> query = em.createNamedQuery("Group.findById", Group.class);
+            TypedQuery<Group> query = em.createNamedQuery("Group.findByClassroom", Group.class);
             query.setParameter("classroom", classroom);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -252,6 +268,8 @@ public class Selects {
             TypedQuery<entity.Module> query = em.createNamedQuery("Module.findById", entity.Module.class);
             query.setParameter("moduleId", moduleId);
             return query.getSingleResult();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -263,9 +281,11 @@ public class Selects {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<entity.Module> query = em.createNamedQuery("Module.findById", entity.Module.class);
+            TypedQuery<entity.Module> query = em.createNamedQuery("Module.findByDescription", entity.Module.class);
             query.setParameter("description", description);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -277,9 +297,11 @@ public class Selects {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<entity.Module> query = em.createNamedQuery("Module.findById", entity.Module.class);
+            TypedQuery<entity.Module> query = em.createNamedQuery("Module.findByNumHours", entity.Module.class);
             query.setParameter("numHours", numHours);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -296,7 +318,9 @@ public class Selects {
             TypedQuery<Project> query = em.createNamedQuery("Project.findById", Project.class);
             query.setParameter("projectId", projectId);
             return query.getSingleResult();
-        } finally {
+        } catch(Exception e){
+            return null;
+        }finally {
             em.close();
             emf.close();
         }
@@ -307,9 +331,11 @@ public class Selects {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Project> query = em.createNamedQuery("Project.findById", Project.class);
+            TypedQuery<Project> query = em.createNamedQuery("Project.findByTitle", Project.class);
             query.setParameter("title", title);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -321,9 +347,11 @@ public class Selects {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Project> query = em.createNamedQuery("Project.findById", Project.class);
+            TypedQuery<Project> query = em.createNamedQuery("Project.findByStudent", Project.class);
             query.setParameter("student", student);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -338,6 +366,8 @@ public class Selects {
             TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findById", Enrollment.class);
             query.setParameter("idEnrollment", idEnrollment);
             return query.getSingleResult();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -349,9 +379,11 @@ public class Selects {
        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findById", Enrollment.class);
+            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findByDescription", Enrollment.class);
             query.setParameter("description", description);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -364,9 +396,11 @@ public class Selects {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findById", Enrollment.class);
+            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findByStudent", Enrollment.class);
             query.setParameter("student", student);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();
@@ -378,9 +412,11 @@ public class Selects {
        EntityManagerFactory emf = Persistence.createEntityManagerFactory("JPAPersistence");
         EntityManager em = emf.createEntityManager();
         try {
-            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findById", Enrollment.class);
+            TypedQuery<Enrollment> query = em.createNamedQuery("Enrollment.findByModule", Enrollment.class);
             query.setParameter("module", module);
             return query.getResultList();
+        }catch(Exception e){
+            return null;
         } finally {
             em.close();
             emf.close();

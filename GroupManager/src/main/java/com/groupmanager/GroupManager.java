@@ -47,11 +47,9 @@ public class GroupManager {
         Project testProject1 = new Project ("1" , "Titulo1" , estudiante1);
         Project testProject2 = new Project ("2" , "Titulo2" , estudiante2);
         Project testProject3 = new Project ("3" , "Titulo3" , estudiante3);
-        
-        
        
-        MainController.starter();
-       
+        
+       MainController.starter();
     }
     
     //Las variables de este metodo estan en español porque en realidad este metodo no es parte de el projecto, es solo para tener datos a la hora de probarlo si fueran necesarios
