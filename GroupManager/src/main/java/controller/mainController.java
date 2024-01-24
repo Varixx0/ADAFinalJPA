@@ -82,10 +82,11 @@ public class MainController {
                     selectsController();
                     break;
                 case 4:
-                    System.out.println("El número es cuatro.");
+                    deletesController();
                     break;
                 case 5:
-                    System.out.println("El número es cinco.");
+                    System.out.println("Gracias por haber utilizado la app. Hasta la proxima!");
+                    System.exit(0);
                     break;
 
             }
@@ -1458,26 +1459,46 @@ public class MainController {
         int selecction = scanInt();
         switch (selecction) {
             case 1:
+                if(Selects.selectAllGroups()!=null){
                 deleteGroupController();
+                }else{
+                    System.out.println("No hay grupos para borrar en la base de datos");
+                }
                 waitingKey();
                 mainMenuController();
                 break;
             case 2:
+                if(Selects.selectAllStudents()!=null){
                 deleteStudentController();
+                }else{
+                    System.out.println("No hay estudiantes para borrar en la base de datos");
+                }
                 waitingKey();
                 mainMenuController();
                 break;
             case 3:
+                if(Selects.selectAllModules()!=null){
                 deleteModuleController();
+                }else{
+                    System.out.println("No hay modulos para borrar en la base de datos");
+                }
                 mainMenuController();
                 break;
             case 4:
-               deleteEnrollmentController();
+               if(Selects.selectAllEnrollments()!=null){
+                deleteEnrollmentController();
+                }else{
+                    System.out.println("No hay matriculas para borrar en la base de datos");
+                }
                waitingKey();
                 mainMenuController();
                 break;
             case 5:
+                if(Selects.selectAllProjects()!=null){
                 deleteProjectController();
+                }else{
+                    System.out.println("No hay proyectos para borrar en la base de datos");
+                }
                 waitingKey();
                 mainMenuController();
                 break;
@@ -1619,11 +1640,38 @@ public class MainController {
     }
     
     public static void deleteModuleController(){
+        System.out.println("[!]Borrar un modulo borrara todos las matriculas, alumnos y por tanto proyectos que tengan asignados. ¿Quieres continuar? S/N");
+        String selection = scanString();
+        if(selection.equals("S")){
         System.out.println("Elige el modulo que deseas borrar");
         entity.Module module = deleteModuleSelector();
         if(Selects.findEnrollmentsByModule(module)!= null){
-            System.out.println("Hay alumnos matriculados en el modulo que intentas borrar, por lo que seran eliminados ");
+            System.out.println("Hay alumnos matriculados en el modulo que intentas borrar. Los alumnos tambien serán eliminados"); 
+            List<Enrollment> enrollments = Selects.findEnrollmentsByModule(module);
+            for (Enrollment enrollment: enrollments) {//Por cada alumno matrioculado borra su proyecto si lo tiene y el propio alumno
+                Deletes.deleteEnrollment(enrollment);
+               if(Selects.findProjectsByStudent(enrollment.getStudent()).get(0)!=null){//El alumno matriculado en el modulo tiene un proyecto asignado
+                   System.out.println("El alumno " + enrollment.getStudent().getName() + " tiene un proyecto asignado, tambien sera borrado junto a la eliminacion del alumno en la base de datos");
+                   //borra el projecto primero
+                   Deletes.deleteProject(Selects.findProjectsByStudent(enrollment.getStudent()).get(0));
+                   System.out.println("Proyecto eliminado con exito");
+                   Deletes.deleteStudent(enrollment.getStudent());
+                   System.out.println("Alumno eliminado con exito");
+               }else{
+                   System.out.println("El alumno " + enrollment.getStudent().getName() +" no tiene ningun proyecto. Sera borrado de la base de datos");
+                   Deletes.deleteStudent(enrollment.getStudent());
+                   System.out.println("Alumno eliminado con exito");
+               }
+               
+            }
+            Deletes.deleteModule(module);
+            System.out.println("Modulo borrado con exito");
         }
+        }else{
+            System.out.println("Has abortado el borrado de modulo, volveras al menu de borrado");
+            waitingKey();
+            deletesController();
+       }
     }
     
     public static entity.Module deleteModuleSelector(){
@@ -1670,6 +1718,101 @@ public class MainController {
         //Este return es solo para que permita compilar. Si no hay ningun error no deberia ejecutarse nunca.
         return module;
     }
+    
+    public static void deleteEnrollmentController(){
+        System.out.println("Elige la matricula que quieras borrar");
+        
+    }
+    
+    public static Enrollment deleteEnrollmentSelector(){
+        System.out.println("Se imprimiran las matriuclas de la base de datos para que puedas elegir cual quieres borrar");
+         Enrollment enrollment = new Enrollment();
+        if (returnEnrollmentsItemCount() != 0) {
+            System.out.println("Elige una de las siguientes matriculas ya creadas para borrarlo de la base de datos ");
+            Menus.printEnrollmentData(Selects.selectAllEnrollments());
+            System.out.println("Introduce la identificacion que quiera utilizar: ");
+            int selecction = scanInt();
+            if (Selects.findEnrollmentById(selecction) != null) {//Si es nulo lo puede crear porque significaque el ID que intentas introducir no lo esta gastando ningun grupo en la base de datos
+                //La consulta se vuelve a hacer, un poco redundante quizas pero no queria tener una variable mas en este metodo.
+                Enrollment enrollmentSelected = Selects.findEnrollmentById(selecction);
+                return enrollmentSelected;
+            } else {//Si no es nulo significa que ya hay un objeto con ese ID en la base de datos y por tanto no puede utilizarlo
+                System.out.println("Ha seleccionado un id que no esta en la base de datos");
+                System.out.println("Por favor seleccione una de las siguientes opciones: ");
+                System.out.println("1. Volver a elegir un proyecto ya existente");
+                System.out.println("2. Volver al menu principal");
+                int optionSelected = scanInt();
+                switch (optionSelected) {
+                    //Volver a elegir un Grupo
+                    case 1:
+                        waitingKey();
+                        enrollment = deleteEnrollmentSelector();
+                        return enrollment;
+                    //Volver al menu de consulta
+                    case 2:
+                        waitingKey();
+                        mainMenuController();
+                        break;
+                    default:
+                        System.out.println("La opcion que has seleccionado no es valida, por tanto, se aborta la consulta de alumno");
+                        mainMenuController();
+                }
+            }
+
+        } else {
+            System.out.println("[!]No hay ninguna matricula en la base de datos. Esto debe ser un error ya que no deberia dejarte borrar la matricula si no hay ninguna en la base de datos");
+        }
+        return enrollment;
+    }
+    
+    public static void deleteProjectController(){
+        System.out.println("Elige el proyecto que deseas eliminar");
+        Project project = deleteProjectSelector();
+        Deletes.deleteProject(project);
+    }
+    
+    public static Project deleteProjectSelector(){
+         System.out.println("Se imprimiran los Proyectos de la base de datos para que puedas elegir cual quieres borrar");
+         Project project = new Project();
+        if (returnProjectsItemCount() != 0) {
+            System.out.println("Elige uno de los siguientes Proyectos ya creados para borrarlo de la base de datos ");
+            Menus.printProjectData(Selects.selectAllProjects());
+            System.out.println("Introduce la identificacion que quiera utilizar: ");
+            String selecction = scanString();
+            if (Selects.findProjectById(selecction) != null) {//Si es nulo lo puede crear porque significaque el ID que intentas introducir no lo esta gastando ningun grupo en la base de datos
+                //La consulta se vuelve a hacer, un poco redundante quizas pero no queria tener una variable mas en este metodo.
+                Project projectSelected = Selects.findProjectById(selecction);
+                return projectSelected;
+            } else {//Si no es nulo significa que ya hay un objeto con ese ID en la base de datos y por tanto no puede utilizarlo
+                System.out.println("Ha seleccionado un id que no esta en la base de datos");
+                System.out.println("Por favor seleccione una de las siguientes opciones: ");
+                System.out.println("1. Volver a elegir un proyecto ya existente");
+                System.out.println("2. Volver al menu principal");
+                int optionSelected = scanInt();
+                switch (optionSelected) {
+                    //Volver a elegir un Grupo
+                    case 1:
+                        waitingKey();
+                        project = deleteProjectSelector();
+                        return project;
+                    //Volver al menu de consulta
+                    case 2:
+                        waitingKey();
+                        mainMenuController();
+                        break;
+                    default:
+                        System.out.println("La opcion que has seleccionado no es valida, por tanto, se aborta la consulta de alumno");
+                        mainMenuController();
+                }
+            }
+
+        } else {
+            System.out.println("[!]No hay ningun proyecti en la base de datos. Esto debe ser un error ya que no deberia dejarte borrar el proyecto si no hay ninguno en la base de datos");
+        }
+        return project;
+        
+    }
+    
     // Vaciar la base de datos
     public static void deleteAllDatabaseSelected() {
         

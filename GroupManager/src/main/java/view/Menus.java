@@ -105,8 +105,8 @@ public class Menus {
         System.out.println("¿Que item deseas introducir?");
         System.out.println("1. Introducir un Grupo");
         System.out.println("2. Introducir un Alumno");
-        System.out.println("3. Introducir una Matricula");
-        System.out.println("4. Introducir un Modulo");
+        System.out.println("3. Introducir un Modulo");
+        System.out.println("4. Introducir un Matricula");
         System.out.println("5. Introducir un Proyecto");
         System.out.println("6. Volver al menu principal");
     }
@@ -188,8 +188,8 @@ public class Menus {
         System.out.println("Por favor elija una de las siguientes opciones: ");
         System.out.println("1. Borrar Grupo");
         System.out.println("2. Borrar Alumno");
-        System.out.println("3. Borrar Matricula");
-        System.out.println("4. Borrar Modulo");
+        System.out.println("3. Borrar Modulo");
+        System.out.println("4. Borrar Matricula");
         System.out.println("5. Borrar Proyecto");
         System.out.println("6. Salir al menu principal");
     
